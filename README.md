@@ -1,2 +1,2 @@
 # Turtles_game
-Gra "żółwie" wersja komputerowa, napisana w języku Python
+Gra "Pędzące żółwie" wersja komputerowa, napisana w języku Python
