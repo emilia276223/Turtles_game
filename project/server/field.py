@@ -7,9 +7,13 @@ class Field:
     def add_turtle(self, turtle):
         self.turtle_stack.append(turtle)
 
-
     def take_turtle(self, turtle):
-        pass
+        i = 0
+        while self.turtle_stack[i] != turtle:
+            i += 1
+        x = self.turtle_stack[i:]
+        self.turtle_stack[i:] = []
+        return x
 
     def get_state(self):
         return self.turtle_stack
