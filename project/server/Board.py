@@ -1,11 +1,13 @@
 from typing import List, Any
-from field import Field
+from field import Field, StartField
+
 
 class Board:
     def __init__(self):
         self.FIELDS = 10
         self.fields = []
-        for _ in range(0, self.FIELDS):
+        self.fields.append(StartField())
+        for _ in range(1, self.FIELDS):
             self.fields.append(Field())
         print(len(self.fields))
         self.turtles = []
