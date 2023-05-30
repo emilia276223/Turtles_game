@@ -19,6 +19,23 @@ class Field:
         return self.turtle_stack
 
 
+class Start_field:
+    def __init__(self):
+        self.turtle_stack = []
+
+    def add_turtle(self, turtle):
+        self.turtle_stack.append(turtle)
+
+    def take_turtle(self, turtle): # zabiera żółwia
+        i = 0
+        while self.turtle_stack[i] != turtle:
+            i += 1
+        return self.turtle_stack.pop(i)
+
+    def get_state(self):
+        return self.turtle_stack
+
+
 if __name__=="__main__":
     f = Field()
     f.add_turtle("YELLOW")
