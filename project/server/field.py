@@ -22,4 +22,10 @@ class Field:
 if __name__=="__main__":
     f = Field()
     f.add_turtle("YELLOW")
+    f.add_turtle("BLUE")
+    f.add_turtle("RED")
+    f.add_turtle("GREEN")
+    f.add_turtle("PURPLE")
     print (f.get_state())
+    print (f.take_turtle("RED"))
+    print(f.get_state())
