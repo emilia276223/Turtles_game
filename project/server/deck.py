@@ -1,5 +1,4 @@
 from card import Card
-import random
 from random import shuffle
 
 class Deck:
@@ -14,33 +13,41 @@ class Deck:
             for i in range(2):
                 self.deck_stack.append(card(color, "-"))
         for i in range(2):
-            self.deck_stack.append(card("KOLOROWY", "^^"))
+            self.deck_stack.append(card("RAINBOW", "^^"))
         for i in range(3):
-            self.deck_stack.append(card("KOLOROWY", "^"))
+            self.deck_stack.append(card("RAINBOW", "^"))
         for i in range(5):
-            self.deck_stack.append(card("KOLOROWY", "+"))
+            self.deck_stack.append(card("RAINBOW", "+"))
         for i in range(2):
-            self.deck_stack.append(card("KOLOROWY", "-"))
-
-
+            self.deck_stack.append(card("RAINBOW", "-"))
+        shuffle(self.deck_stack)
 
     def take_card(self):
         if len(self.deck_stack) < 1:
             raise "error - deck_stack is empty"
-        elif len(self.deck_stack) == 1:
-            x = self.deck_stack[0]
-            new_deck_stack(self)
-            return x
         else:
-            x = random.choice(self.deck_stack)
-            i = 0
-            while self.deck_stack[i] != x:
-                i += 1
-            return self.deck_stack.pop(i)
+            if len(self.deck_stack) == 1:
+                shuffle(self.used_cards)
+                self.deck_stack = self.deck_stack + self.used_cards
+                self.used_cards = []
+            return self.deck_stack.pop(0)
+
+    def throw_card(self, card):
+        self.used_cards.append(card)
 
 if __name__ == "__main__":
-    l = [1, 5, 7]
-    x = l
-    shuffle(l)
-    print(x)
-    print(l)
+    # l = [1, 5, 7]
+    # x = l
+    # shuffle(l)
+    # print(x)
+    # print(l)
+    d = Deck()
+    reka = []
+    for i in range(5):
+        reka.append(d.take_card())
+        print(reka)
+    for i in range(40):
+        d.throw_card(reka[1])
+        reka = reka[0] + reka[2:]
+        reka.append(d.take_card())
+        print(reka)
