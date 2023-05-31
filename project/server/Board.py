@@ -1,21 +1,29 @@
 from typing import List, Any
 from field import Field, StartField
+from turtle import Turtle
 
 
 class Board:
-    def __init__(self, FIELDS, end_consumer):
+    def __init__(self, FIELDS, end_consumer, turtles):
         self.FIELDS = FIELDS
         self.fields = []
-        self.fields.append(StartField())
+        self.fields.append(StartField(turtles))
         for _ in range(1, FIELDS):
             self.fields.append(Field())
         # print(len(self.fields))
+        # self.turtles = {
+        #     "YELLOW": 0,
+        #     "BLUE": 0,
+        #     "RED": 0,
+        #     "GREEN": 0,
+        #     "PURPLE": 0
+        # }
         self.turtles = {
-            "YELLOW": 0,
-            "BLUE": 0,
-            "RED": 0,
-            "GREEN": 0,
-            "PURPLE": 0
+            turtles[0]: 0,
+            turtles[1]: 0,
+            turtles[2]: 0,
+            turtles[3]: 0,
+            turtles[4]: 0
         }
         self.is_finished = False
         self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
@@ -75,19 +83,27 @@ class Board:
 
 
 if __name__ == "__main__":
-    print("gra pierwsza:")
-    board = Board(5, lambda ranking: print("Wynik gry:", ranking)) # przecinek w princie wstawia dodatkową spację
-    board.move_turtle("YELLOW", 2)
-    board.move_turtle("PURPLE", 3)
-    board.move_turtle("GREEN", 2)
-    board.move_turtle("YELLOW", 2)
+    yellow = Turtle("YELLOW")
+    green = Turtle("GREEN")
+    blue = Turtle("BLUE")
+    purple = Turtle("PURPLE")
+    red = Turtle("RED")
 
-    print("gra druga:")
-    board = Board(5, lambda ranking: print("Wynik gry 2:", ranking))  # przecinek w princie wstawia dodatkową spację
-    board.move_turtle("GREEN", 2)
-    board.move_turtle("PURPLE", 3)
-    board.move_turtle("GREEN", 2)
-    board.move_turtle("YELLOW", 2)
+    turtles = [yellow, green, blue, purple, red]
+
+    print("gra pierwsza:")
+    board = Board(5, lambda ranking: [print (i.get_color(), end=", ") for i in ranking], turtles.copy()) # przecinek w princie wstawia dodatkową spację
+    board.move_turtle(yellow, 2)
+    board.move_turtle(purple, 3)
+    board.move_turtle(green, 2)
+    board.move_turtle(yellow, 2)
+
+    print("\ngra druga:")
+    board = Board(5, lambda ranking: [print (i.get_color(), end=", ") for i in ranking], turtles.copy())  # przecinek w princie wstawia dodatkową spację
+    board.move_turtle(green, 2)
+    board.move_turtle(purple, 3)
+    board.move_turtle(green, 2)
+    board.move_turtle(yellow, 2)
 
 
 

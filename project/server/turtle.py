@@ -7,4 +7,5 @@ class Turtle:
     def get_color(self):
         return self.color
 
+    def __str__(self): return self.color
 

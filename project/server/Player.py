@@ -1,3 +1,5 @@
+from card import Card
+from turtle import Turtle
 class Player:
 	def __init__(self, turtle):
 		self.cards = []
@@ -14,3 +16,11 @@ class Player:
 
 	def remove_card(self, card):
 		self.cards.remove(card)
+
+
+if __name__ == "__main__":
+	turtle1 = Turtle("GREEN")
+	turtle2 = Turtle("PURPLE")
+	player1 = Player(turtle1)
+	player2 = Player(turtle2)
+	card

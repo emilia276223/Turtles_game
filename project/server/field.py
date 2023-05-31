@@ -20,8 +20,8 @@ class Field:
 
 
 class StartField:
-    def __init__(self):
-        self.turtle_stack = ["YELLOW", "RED", "GREEN", "PURPLE", "BLUE"]
+    def __init__(self, turtles):
+        self.turtle_stack = turtles
 
     def add_turtle(self, turtle):
         self.turtle_stack.append(turtle)
@@ -37,6 +37,7 @@ class StartField:
 
 
 if __name__=="__main__":
+    """
     f = Field()
     f.add_turtle("YELLOW")
     f.add_turtle("BLUE")
@@ -52,3 +53,4 @@ if __name__=="__main__":
     print(f.take_turtle("RED"))
     print(f.take_turtle("GREEN"))
     print(f.get_state())
+"""
