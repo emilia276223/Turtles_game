@@ -8,18 +8,18 @@ class Deck:
         colors = ["YELLOW", "BLUE", "GREEN", "RED", "PURPLE"]
         for color in colors:
             for i in range(5):
-                self.deck_stack.append(card(color, "+"))
-            self.deck_stack.append(card(color, "++"))
+                self.deck_stack.append(Card(color, "+"))
+            self.deck_stack.append(Card(color, "++"))
             for i in range(2):
-                self.deck_stack.append(card(color, "-"))
+                self.deck_stack.append(Card(color, "-"))
         for i in range(2):
-            self.deck_stack.append(card("RAINBOW", "^^"))
+            self.deck_stack.append(Card("RAINBOW", "^^"))
         for i in range(3):
-            self.deck_stack.append(card("RAINBOW", "^"))
+            self.deck_stack.append(Card("RAINBOW", "^"))
         for i in range(5):
-            self.deck_stack.append(card("RAINBOW", "+"))
+            self.deck_stack.append(Card("RAINBOW", "+"))
         for i in range(2):
-            self.deck_stack.append(card("RAINBOW", "-"))
+            self.deck_stack.append(Card("RAINBOW", "-"))
         shuffle(self.deck_stack)
 
     def take_card(self):
