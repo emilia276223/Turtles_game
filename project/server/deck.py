@@ -36,6 +36,12 @@ class Deck:
         self.used_cards.append(card)
 
 if __name__ == "__main__":
+    def show(cards):
+        print("[", end="")
+        for c in cards:
+            print("(" + c.get_color() + ", " + c.get_val() + ")", end=", ")
+        print("]")
+
     # l = [1, 5, 7]
     # x = l
     # shuffle(l)
@@ -45,9 +51,9 @@ if __name__ == "__main__":
     reka = []
     for i in range(5):
         reka.append(d.take_card())
-        print(reka)
+        show(reka)
     for i in range(40):
         d.throw_card(reka[1])
-        reka = reka[0] + reka[2:]
+        reka = [reka[0]] + reka[2:]
         reka.append(d.take_card())
-        print(reka)
+        show(reka)
