@@ -49,46 +49,45 @@ class Board:
 
     def move_turtle(self, turtle, val): #poprawić
         place = self.turtles.get(turtle)
-        print(place)
+        # print(place)
         if place is None:
             raise "turtle does not exist"
         moved = self.fields[place].take_turtle(turtle)
         if moved is str:
             moved = [moved]
-        print(moved)
-        if self.FIELDS > place + val >= 0:
+        # print(moved)
+        if (self.FIELDS - 1) > place + val >= 0:
             for moved_turtle in moved:
-                print(moved_turtle)
+                # print(moved_turtle)
                 self.fields[place + val].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = place + val
         elif place + val < 0:
             for moved_turtle in moved:
-                print(moved_turtle)
+                # print(moved_turtle)
                 self.fields[0].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = 0
         else:
             for moved_turtle in moved:
-                print(moved_turtle)
+                # print(moved_turtle)
                 self.fields[self.FIELDS - 1].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = self.FIELDS - 1
             self.finish() #dopisac
 
 
 if __name__ == "__main__":
+    print("gra pierwsza:")
     board = Board(5, lambda ranking: print("Wynik gry:", ranking)) # przecinek w princie wstawia dodatkową spację
-    print(board.fields[0].turtle_stack)
-    print(board.fields[1])
+    board.move_turtle("YELLOW", 2)
+    board.move_turtle("PURPLE", 3)
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("YELLOW", 2)
 
-    print(board.fields[0].turtle_stack)
-
-    print (board.move_turtle("YELLOW", 2))
-    print (board.move_turtle("PURPLE", 3))
-    print (board.move_turtle("GREEN", 2))
-    print (board.move_turtle("YELLOW", 2))
-    print (board.move_turtle("YELLOW", 2))
-    # print(board.move_turtle("YELLOW", 2))
-    # print(board.move_turtle("YELLOW", 2))
-    # dodac wiecej testow
+    print("gra druga:")
+    board = Board(5, lambda ranking: print("Wynik gry 2:", ranking))  # przecinek w princie wstawia dodatkową spację
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("PURPLE", 3)
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("YELLOW", 2)
 
 
 
