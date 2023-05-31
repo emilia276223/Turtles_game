@@ -51,7 +51,7 @@ if __name__ == "__main__":
     reka = []
     for i in range(5):
         reka.append(d.take_card())
-        show(reka)
+    show(reka)
     for i in range(40):
         d.throw_card(reka[1])
         reka = [reka[0]] + reka[2:]
