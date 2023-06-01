@@ -4,49 +4,22 @@ from turtle import Turtle
 
 # pozbyć sie klasy zolw, robimy napisy jak wczesniej
 class Board:
-    def __init__(self, FIELDS, end_consumer, turtles):
+    def __init__(self, FIELDS, end_consumer):
         self.FIELDS = FIELDS
         self.fields = []
-        self.fields.append(StartField(turtles))
+        self.fields.append(StartField())
         for _ in range(1, FIELDS):
             self.fields.append(Field())
         # print(len(self.fields))
-        # self.turtles = {
-        #     "YELLOW": 0,
-        #     "BLUE": 0,
-        #     "RED": 0,
-        #     "GREEN": 0,
-        #     "PURPLE": 0
-        # }
-        self.turtles = { #
-            turtles[0]: 0,
-            turtles[1]: 0,
-            turtles[2]: 0,
-            turtles[3]: 0,
-            turtles[4]: 0
+        self.turtles = {
+            "YELLOW": 0,
+            "BLUE": 0,
+            "RED": 0,
+            "GREEN": 0,
+            "PURPLE": 0
         }
         self.is_finished = False
         self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
-
-    # def place_turtle(self, turtle, place):
-    #     self.fields[place].add_turtle(turtle)
-
-    # def add_turtle(self, turtle):
-    #     self.turtles.append(turtle)
-    #     self.place_turtle(turtle, 0)
-
-    # def find_turtle(self, turtle):
-    #     i = 0
-    #     while i < self.FIELDS:
-    #         if turtle in self.fields[i].get_state():
-    #             return i
-    #         i += 1
-    #     return None
-
-    # def if_finished(self):
-    #     if len(self.fields[self.FIELDS - 1].get_state()) > 0:
-    #         return True
-    #     return False
 
     def finish(self):
         self.is_finished = True
@@ -87,35 +60,97 @@ class Board:
             state[i] = self.fields[i].get_state()
         return state
 
-    def accept_card(self, card, color=None):
-        # porudzenie odpowiednim zolwiem
+    def accept_card(self, card, color=None): # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
+        # card value -> number
+        if card.val == "++" or card.val == "^^":
+            shift = 2
+            # print("++")
+        elif card.val == "+" or card.val == "^":
+            shift = 1
+            # print("+")
+        elif card.val == "-":
+            shift = -1
+            # print("-")
+        elif card.val == "--":
+            shift = -2
+            # print("--")
+        else:
+            raise "unknown card"
+
+        # card color -> moved turtle
+        if card.color == "RAINBOW":
+            moved_turtle = color # poprawic potem
+        else:
+            moved_turtle = card.color
+
+        self.move_turtle(moved_turtle, shift)
 
 if __name__ == "__main__":
     from card import Card
-    yellow = Turtle("YELLOW")
-    green = Turtle("GREEN")
-    blue = Turtle("BLUE")
-    purple = Turtle("PURPLE")
-    red = Turtle("RED")
 
-    turtles = [yellow, green, blue, purple, red]
-    # dac lambde do funkcji, zeby nie powtarzac kodu
+    def print_end(ranking):
+        print(ranking)
+
+    print("TESTY BEZ KART:")
+
     print("gra pierwsza:")
-    board = Board(5, lambda ranking: [print (i.get_color(), end=", ") for i in ranking], turtles.copy()) # przecinek w princie wstawia dodatkową spację
-    board.move_turtle(yellow, 2)
-    board.move_turtle(purple, 3)
-    board.move_turtle(green, 2)
-    board.move_turtle(yellow, 2)
+    board = Board(5, print_end) # przecinek w princie wstawia dodatkową spację
+    board.move_turtle("YELLOW", 2)
+    board.move_turtle("PURPLE", 3)
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("YELLOW", 2)
+    print("powinno być: y, g, p, (b / r), (r / b)")
 
     print("\ngra druga:")
-    board = Board(5, lambda ranking: [print (i.get_color(), end=", ") for i in ranking], turtles.copy())  # przecinek w princie wstawia dodatkową spację
-    board.move_turtle(green, 2)
-    board.move_turtle(purple, 3)
-    board.move_turtle(green, 2)
-    board.move_turtle(yellow, 2)
+    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("PURPLE", 3)
+    board.move_turtle("GREEN", 2)
+    print("powinno być: g, p, (y / b / r dowolnie)")
 
-    # dodac testy z kartami a nie move_turtle
+    print("TESTY Z KARTAMI PROSTYMI:")
 
+    y2 = Card("YELLOW", "++")
+    y1 = Card("YELLOW", "+")
+    y_1 = Card("YELLOW", "-")
+    b1 = Card("BLUE", "+")
+    p1 = Card("PURPLE", "+")
+    p2 = Card("PURPLE", "++")
+    g2 = Card("GREEN", "++")
+    g_2 = Card("GREEN", "--")
+    g_1 = Card("GREEN", "-")
+    p_1 = Card("PURPLE", "-")
 
+    print("gra pierwsza:")
+    board = Board(5, print_end) # przecinek w princie wstawia dodatkową spację
+    board.accept_card(y2)
+    board.accept_card(p1)
+    board.accept_card(p2)
+    board.accept_card(g2)
+    board.accept_card(y2)
+    print("powinno być: y, g, p, (b / r), (r / b)")
+
+    print("\ngra druga:")
+    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board.accept_card(g2)
+    # print(board.get_state())
+    board.accept_card(p2)
+    # print(board.get_state())
+    board.accept_card(p_1)
+    # print(board.get_state())
+    board.accept_card(p2)
+    # print(board.get_state())
+    board.accept_card(y1)
+    # print(board.get_state())
+    board.accept_card(b1)
+    # print(board.get_state())
+    board.accept_card(y_1)
+    # print(board.get_state())
+    board.accept_card(y2)
+    # print(board.get_state())
+    board.accept_card(g2)
+    # print(board.get_state())
+
+    print("powinno być: g, y, p, ( b / r dowolnie)")
 
 
