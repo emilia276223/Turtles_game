@@ -2,7 +2,7 @@ from typing import List, Any
 from field import Field, StartField
 from turtle import Turtle
 
-
+# pozbyć sie klasy zolw, robimy napisy jak wczesniej
 class Board:
     def __init__(self, FIELDS, end_consumer, turtles):
         self.FIELDS = FIELDS
@@ -18,7 +18,7 @@ class Board:
         #     "GREEN": 0,
         #     "PURPLE": 0
         # }
-        self.turtles = {
+        self.turtles = { #
             turtles[0]: 0,
             turtles[1]: 0,
             turtles[2]: 0,
@@ -81,8 +81,17 @@ class Board:
                 self.turtles[moved_turtle] = self.FIELDS - 1
             self.finish() #dopisac
 
+    def get_state(self):
+        state = {}
+        for i in range(0, self.FIELDS):
+            state[i] = self.fields[i].get_state()
+        return state
+
+    def accept_card(self, card, color=None):
+        # porudzenie odpowiednim zolwiem
 
 if __name__ == "__main__":
+    from card import Card
     yellow = Turtle("YELLOW")
     green = Turtle("GREEN")
     blue = Turtle("BLUE")
@@ -90,7 +99,7 @@ if __name__ == "__main__":
     red = Turtle("RED")
 
     turtles = [yellow, green, blue, purple, red]
-
+    # dac lambde do funkcji, zeby nie powtarzac kodu
     print("gra pierwsza:")
     board = Board(5, lambda ranking: [print (i.get_color(), end=", ") for i in ranking], turtles.copy()) # przecinek w princie wstawia dodatkową spację
     board.move_turtle(yellow, 2)
@@ -104,6 +113,8 @@ if __name__ == "__main__":
     board.move_turtle(purple, 3)
     board.move_turtle(green, 2)
     board.move_turtle(yellow, 2)
+
+    # dodac testy z kartami a nie move_turtle
 
 
 
