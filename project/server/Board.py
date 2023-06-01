@@ -60,6 +60,18 @@ class Board:
             state[i] = self.fields[i].get_state()
         return state
 
+    def get_last_s(self): # mam wrazenie ze moze sie przydac dla gry, jesli nie to sie usunie
+        x = self.fields[0].get_state()
+        # print(x)
+        if len(x) > 0:
+            return x
+        for f in self.fields:
+            x = f.get_state()
+            # print(x)
+            if len(x) > 0:
+                return [x[(len(x) - 1)]] # opakowane w liste zeby zawsze zwracalo liste elementow
+
+# (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
     def accept_card(self, card, color=None): # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
         # card value -> number
         if card.val == "++" or card.val == "^^":
@@ -121,6 +133,8 @@ if __name__ == "__main__":
     g_1 = Card("GREEN", "-")
     p_1 = Card("PURPLE", "-")
 
+
+# (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
     print("gra pierwsza:")
     board = Board(5, print_end) # przecinek w princie wstawia dodatkową spację
     board.accept_card(y2)
@@ -129,6 +143,7 @@ if __name__ == "__main__":
     board.accept_card(g2)
     board.accept_card(y2)
     print("powinno być: y, g, p, (b / r), (r / b)")
+
 
     print("\ngra druga:")
     board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
@@ -152,5 +167,40 @@ if __name__ == "__main__":
     # print(board.get_state())
 
     print("powinno być: g, y, p, ( b / r dowolnie)")
+#  (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
 
+    print("\ngra druga:")
+    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board.accept_card(g2)
+    board.accept_card(p2)
 
+    print("ostatni/e to:", board.get_last_s()) # y, b, r
+
+    board.accept_card(p_1)
+    board.accept_card(p2)
+    board.accept_card(y1)
+    board.accept_card(b1)
+    board.accept_card(y_1)
+    board.accept_card(y2)
+
+    print("ostatni/e to:", board.get_last_s()) # r, b
+
+    board.accept_card(g2)
+
+    print("powinno być: g, y, p, ( b / r dowolnie)")
+
+    # WAŻNE - założyłam, że to gra zadba o to, żeby dostarczyć odpowiednią informację o kolorze jesli jest RAINBOW,
+    # w tym kiedy jest ^ lub ^^ (bo jesli jest więcej niż 1 na starcie to można wybrać, na którego działa
+
+    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board.move_turtle("YELLOW", 2)
+    board.move_turtle("PURPLE", 3)
+    board.move_turtle("GREEN", 2)
+    board.move_turtle("BLUE", 2)
+    board.move_turtle("RED", 2)
+
+    print("ostatni/e to:", board.get_last_s()) # r
+
+    board.move_turtle("YELLOW", 2)
+
+    print("ostatni/e to:", board.get_last_s()) # p

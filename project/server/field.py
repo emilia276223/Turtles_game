@@ -13,10 +13,10 @@ class Field:
             i += 1
         x = self.turtle_stack[i:]
         self.turtle_stack[i:] = []
-        return x
+        return x.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
 
     def get_state(self):
-        return self.turtle_stack
+        return self.turtle_stack.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
 
 
 class StartField:
@@ -33,7 +33,7 @@ class StartField:
         return [self.turtle_stack.pop(i)]
 
     def get_state(self):
-        return self.turtle_stack
+        return self.turtle_stack.copy()
 
 
 if __name__=="__main__":
