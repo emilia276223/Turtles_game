@@ -36,3 +36,12 @@ class Game:
         self.deck.throw_card(card # wrzucamy na stos kart odrzuconych
         player.add_card(self.deck.take_card) # dobiera nowa karte
 
+    def card_on_desk(self, player, card):
+        # odpowiedz pusta oznacza ze ten gracz nie mial zagrac karty (None)
+        # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
+
+    def get_state(self):
+        state = {
+            "board":self.board.get_state()
+        }
+        # dodaje wszystkie ustawienia ktore ma gra
