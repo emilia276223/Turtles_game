@@ -9,6 +9,9 @@ class Player:
 	# def get_turtle(self): #del
 	# 	return self.turtle
 
+	def get_ip(self):
+		return self.IP
+
 	def add_card(self, card):
 		self.cards.append(card)
 
