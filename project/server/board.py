@@ -21,6 +21,9 @@ class Board:
         self.is_finished = False
         self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
 
+    def is_finish(self):
+        return self.is_finished
+
     def finish(self):
         self.is_finished = True
         ranking = []

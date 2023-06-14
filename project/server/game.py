@@ -44,14 +44,16 @@ class Game:
 
     def get_state(self):
         players_state = []
-        # lista stanow graczy players: get_state
-        # z borda pobierz is_finished i podstaw do tej
+        for key in self.players:
+            cards = key + self.players[key].get_cards()
+            players_state.append(cards) # lista stanow kart graczy
         state = {
             "board":self.board.get_state(),
             "players":players_state
         }
-        # sprawdz czy koniec
-        # na koniec gry wyswietl ranking ktory jest w board'zie
+        self.is_finished = self.board.is_finished()
+        if self.is_finished:
+            return self.board.ranking() # na koniec gry wyswietl ranking ktory jest w board'zie
         return state
 
 
