@@ -1,4 +1,6 @@
 import pygame as pygame
+
+
 class Client:
 	def __init__(self, w, h): # tu sie musimy zastanowic jak z tym w, h
 		self.screen = pygame.display.set_mode((w, h))
@@ -11,6 +13,7 @@ class GUI:
 		self.draw_turtle = DrawTurtle(screen)
 		self.draw_board = DrawBoard(screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
 		self.draw_card = DrawCard(screen)
+
 
 class DrawTurtle:
 	def __init__(self, screen):
