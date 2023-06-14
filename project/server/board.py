@@ -24,6 +24,10 @@ class Board:
     def is_finish(self):
         return self.is_finished
 
+    def ranking(self):
+        # wypisuje ranking
+        pass
+
     def finish(self):
         self.is_finished = True
         ranking = []

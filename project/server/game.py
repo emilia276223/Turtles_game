@@ -43,10 +43,9 @@ class Game:
             return None
 
     def get_state(self):
-        players_state = []
+        players_state = {} # []
         for key in self.players:
-            cards = key + self.players[key].get_cards()
-            players_state.append(cards) # lista stanow kart graczy
+            players_state[key] = self.players[key].get_cards() # lista stanow kart graczy
         state = {
             "board":self.board.get_state(),
             "players":players_state
@@ -59,7 +58,14 @@ class Game:
 
 
 if __name__ == "__main__":
-    g = Game(["a", "b", "c", "d", "e"])
+    import random
+    players = ["a", "b", "c", "d", "e"]
+    g = Game(players)
+    print g.get_state() # nie wiem czemu tu wyskakuje blad...
+    for i in range(20):
+        p = random.choice(players)
+        g.card_on_desk(p,g.get_state()["players"][p][random.randint(0,4)])
+        print g.get_state()
 
 
 # przeprowadzic rozgrywki kartami poprzez wykonanie tylko card_on_desk
