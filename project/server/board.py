@@ -100,6 +100,7 @@ class Board:
 
         self.move_turtle(moved_turtle, shift)
 
+
 if __name__ == "__main__":
     from card import Card
     
@@ -120,8 +121,6 @@ if __name__ == "__main__":
     print("ranking:", board.ranking)
     
     print("powinno być: y, g, p, (b / r), (r / b)")
-    
-    
 
     print("\ngra druga:")
     board = Board(5)  # przecinek w princie wstawia dodatkową spację
@@ -144,7 +143,6 @@ if __name__ == "__main__":
     g_1 = Card("GREEN", "-")
     p_1 = Card("PURPLE", "-")
 
-
 # (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
     print("gra pierwsza:")
     board = Board(5) # przecinek w princie wstawia dodatkową spację
@@ -155,7 +153,6 @@ if __name__ == "__main__":
     board.accept_card(y2)
     print("ranking:", board.ranking)
     print("powinno być: y, g, p, (b / r), (r / b)")
-
 
     print("\ngra druga:")
     board = Board(5)  # przecinek w princie wstawia dodatkową spację
