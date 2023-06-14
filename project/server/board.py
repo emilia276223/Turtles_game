@@ -4,7 +4,7 @@ from turtle import Turtle
 
 # pozbyć sie klasy zolw, robimy napisy jak wczesniej
 class Board:
-    def __init__(self, FIELDS, end_consumer):
+    def __init__(self, FIELDS): # (self, FIELDS, end_consumer):
         self.FIELDS = FIELDS
         self.fields = []
         self.fields.append(StartField())
@@ -19,14 +19,16 @@ class Board:
             "PURPLE": 0
         }
         self.is_finished = False
-        self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
+        # self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
 
     def finish(self):
         self.is_finished = True
         ranking = []
         for i in range(self.FIELDS - 1, -1, -1):
             ranking.extend(self.fields[i].get_state())
-        self.end_consumer(ranking)
+        # self.end_consumer(ranking)
+        self.ranking = ranking
+
 
     def move_turtle(self, turtle, val): #poprawić
         place = self.turtles.get(turtle)
@@ -56,6 +58,7 @@ class Board:
 
     def get_state(self):
         state = {}
+        state["is_finished"] = self.is_finished
         for i in range(0, self.FIELDS):
             state[i] = self.fields[i].get_state()
         return state
@@ -99,25 +102,33 @@ class Board:
 
 if __name__ == "__main__":
     from card import Card
+    
+    # na koniec każdej gry dodać wyświetlenie rankingu
 
-    def print_end(ranking):
-        print(ranking)
-
+#    def print_end(ranking):
+#        print(ranking)
+#
     print("TESTY BEZ KART:")
 
     print("gra pierwsza:")
-    board = Board(5, print_end) # przecinek w princie wstawia dodatkową spację
+    board = Board(5) # przecinek w princie wstawia dodatkową spację
     board.move_turtle("YELLOW", 2)
     board.move_turtle("PURPLE", 3)
     board.move_turtle("GREEN", 2)
     board.move_turtle("YELLOW", 2)
+    
+    print("ranking:", board.ranking)
+    
     print("powinno być: y, g, p, (b / r), (r / b)")
+    
+    
 
     print("\ngra druga:")
-    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)  # przecinek w princie wstawia dodatkową spację
     board.move_turtle("GREEN", 2)
     board.move_turtle("PURPLE", 3)
     board.move_turtle("GREEN", 2)
+    print("ranking:", board.ranking)
     print("powinno być: g, p, (y / b / r dowolnie)")
 
     print("TESTY Z KARTAMI PROSTYMI:")
@@ -136,17 +147,18 @@ if __name__ == "__main__":
 
 # (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
     print("gra pierwsza:")
-    board = Board(5, print_end) # przecinek w princie wstawia dodatkową spację
+    board = Board(5) # przecinek w princie wstawia dodatkową spację
     board.accept_card(y2)
     board.accept_card(p1)
     board.accept_card(p2)
     board.accept_card(g2)
     board.accept_card(y2)
+    print("ranking:", board.ranking)
     print("powinno być: y, g, p, (b / r), (r / b)")
 
 
     print("\ngra druga:")
-    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)  # przecinek w princie wstawia dodatkową spację
     board.accept_card(g2)
     # print(board.get_state())
     board.accept_card(p2)
@@ -165,12 +177,13 @@ if __name__ == "__main__":
     # print(board.get_state())
     board.accept_card(g2)
     # print(board.get_state())
+    print("ranking:", board.ranking)
 
     print("powinno być: g, y, p, ( b / r dowolnie)")
 #  (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
 
     print("\ngra druga:")
-    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)  # przecinek w princie wstawia dodatkową spację
     board.accept_card(g2)
     board.accept_card(p2)
 
@@ -187,20 +200,23 @@ if __name__ == "__main__":
 
     board.accept_card(g2)
 
+    print("ranking:", board.ranking)
     print("powinno być: g, y, p, ( b / r dowolnie)")
 
     # WAŻNE - założyłam, że to gra zadba o to, żeby dostarczyć odpowiednią informację o kolorze jesli jest RAINBOW,
     # w tym kiedy jest ^ lub ^^ (bo jesli jest więcej niż 1 na starcie to można wybrać, na którego działa
 
-    board = Board(5, print_end)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)  # przecinek w princie wstawia dodatkową spację
     board.move_turtle("YELLOW", 2)
     board.move_turtle("PURPLE", 3)
     board.move_turtle("GREEN", 2)
     board.move_turtle("BLUE", 2)
     board.move_turtle("RED", 2)
 
+    print("ranking:", board.ranking)
     print("ostatni/e to:", board.get_last_s()) # r
 
     board.move_turtle("YELLOW", 2)
 
+    print("ranking:", board.ranking)
     print("ostatni/e to:", board.get_last_s()) # p
