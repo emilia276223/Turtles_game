@@ -1,19 +1,19 @@
 import pygame as pygame
 
-
 class Client:
-	def __init__(self, w, h): # tu sie musimy zastanowic jak z tym w, h
-		self.screen = pygame.display.set_mode((w, h))
-		pygame.display.set_caption("Turtles Game")
-
+	def __init__(self, w, h, conn, ): # tu sie musimy zastanowic jak z tym w, h
+		pass
 
 class GUI:
 	def __init__(self, w, h): # tu sie musimy zastanowic jak z tym w, h
 		self.screen = pygame.display.set_mode((w, h))
+		pygame.display.set_caption("Turtles Game")
 		self.draw_turtle = DrawTurtle(screen)
 		self.draw_board = DrawBoard(screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
 		self.draw_card = DrawCard(screen)
 
+	def show_game_state(self, game_state):
+		pass
 
 class DrawTurtle:
 	def __init__(self, screen):
