@@ -61,11 +61,11 @@ if __name__ == "__main__":
     import random
     players = ["a", "b", "c", "d", "e"]
     g = Game(players)
-    print g.get_state() # nie wiem czemu tu wyskakuje blad...
+    print(g.get_state()) # nie wiem czemu tu wyskakuje blad...
     for i in range(20):
         p = random.choice(players)
         g.card_on_desk(p,g.get_state()["players"][p][random.randint(0,4)])
-        print g.get_state()
+        print(g.get_state())
 
 
 # przeprowadzic rozgrywki kartami poprzez wykonanie tylko card_on_desk
