@@ -29,7 +29,7 @@ class Game:
     def turn(self, player, card):
         self.board.accept_card(card) # karta rusza zlowiem
         player.remove_card(card) # zabieramy ta karte z reki
-        self.deck.throw_card(card # wrzucamy na stos kart odrzuconych
+        self.deck.throw_card(card) # wrzucamy na stos kart odrzuconych
         player.add_card(self.deck.take_card) # dobiera nowa karte
 
     def card_on_desk(self, ip_player, card):
