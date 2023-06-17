@@ -9,4 +9,6 @@ class Card:
     def get_val(self):
         return self.val
 
+    def __str__(self):
+        return self.color + " " + self.val
     
