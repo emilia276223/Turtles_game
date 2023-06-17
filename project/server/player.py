@@ -31,3 +31,4 @@ if __name__ == "__main__":
 	# player1 = Player(turtle1)
 	# player2 = Player(turtle2)
 	# card
+	pass

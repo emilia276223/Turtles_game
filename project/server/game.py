@@ -6,11 +6,11 @@ from board import Board
 # from turtle import Turtle
 
 class Game:
-    def __init__(self, ip_players): # gra dostaje liste adresow ip graczy
+    def __init__(self, ip_players, fields): # gra dostaje liste adresow ip graczy
         self.players = {}
         self.whos_turn = []
         self.deck = Deck()
-        self.board = Board()
+        self.board = Board(fields)
         self.licznik = 0
         self.is_finished = False
         # turtles = [Turtle("RED"),Turtle("GREEN"),Turtle("BLUE"),Turtle("PURPLE"),Turtle("YELLOW")]
@@ -24,7 +24,7 @@ class Game:
         # gracze dostaja po 5 kart na poczatku
         for i in range(5):
             for p in self.players:
-                p.add_card(self.deck.take_card)
+                self.players[p].add_card(self.deck.take_card())
 
     def turn(self, player, card):
         self.board.accept_card(card) # karta rusza zlowiem
@@ -33,7 +33,7 @@ class Game:
         player.add_card(self.deck.take_card) # dobiera nowa karte
 
     def card_on_desk(self, ip_player, card):
-        if ip_player == get.ip(self.whos_turn[self.licznik]): # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
+        if ip_player == self.whos_turn[self.licznik].get_ip(): # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
             turn(self.players[ip_player],card)
             self.licznik += 1
             if len(self.whos_turn) >= self.licznik:
@@ -50,9 +50,9 @@ class Game:
             "board":self.board.get_state(),
             "players":players_state
         }
-        self.is_finished = self.board.is_finished()
+        self.is_finished = self.board.is_finished
         if self.is_finished:
-            return self.board.ranking() # na koniec gry wyswietl ranking ktory jest w board'zie
+            return self.board.ranking # na koniec gry wyswietl ranking ktory jest w board'zie
         return state
 
 
@@ -60,12 +60,17 @@ class Game:
 if __name__ == "__main__":
     import random
     players = ["a", "b", "c", "d", "e"]
-    g = Game(players)
+    g = Game(players,5)
     print(g.get_state())
     for i in range(20):
         p = random.choice(players)
         g.card_on_desk(p,g.get_state()["players"][p][random.randint(0,4)])
-        print(g.get_state())
+        state = g.get_state()
+        print(state)
+        if g.is_finished:
+            print("ktory krok gry ",i)
+            break
+
 
 
 # przeprowadzic rozgrywki kartami poprzez wykonanie tylko card_on_desk
