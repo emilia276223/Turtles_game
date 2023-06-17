@@ -34,7 +34,7 @@ class Game:
 
     def card_on_desk(self, ip_player, card):
         if ip_player == self.whos_turn[self.licznik].get_ip(): # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
-            turn(self.players[ip_player],card)
+            self.turn(self.players[ip_player],card) # przy wywolaniu metody tez jest self
             self.licznik += 1
             if len(self.whos_turn) >= self.licznik:
                 self.licznik = 0
