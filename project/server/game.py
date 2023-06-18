@@ -1,8 +1,12 @@
 from random import shuffle
-from player import Player
-from deck import Deck
-from card import Card
-from board import Board
+from server.player import Player
+from server.deck import Deck
+from server.card import Card
+from server.board import Board
+# from player import Player
+# from deck import Deck
+# from card import Card
+# from board import Board
 # from turtle import Turtle
 
 class Game:
@@ -37,7 +41,7 @@ class Game:
         # print("player {} who should {}".format(ip_player, who))
         if ip_player == who: # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
             # print("corect player {} play card {}".format(ip_player,card))
-            self.turn(self.players[ip_player],card, color) # przy wywolaniu metody tez jest self
+            self.turn(self.players[ip_player], card, color) # przy wywolaniu metody tez jest self
             self.licznik += 1
             # print("licznik {}".format(self.licznik))
             if len(self.whos_turn) == self.licznik:
