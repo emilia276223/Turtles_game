@@ -31,8 +31,11 @@ class GUI:
 
 		if game_state["g_status"] == "game":
 			state = game_state["game_state"]
-			self.draw_board.draw(state["board"])
-			self.draw_turtle.draw(state["players"])
+			# self.draw_board.draw(state["board"])
+			i = 0
+			for card in state["players"][self.player_key]:
+				self.draw_card.draw(card, i)
+				i += 1
 			pygame.display.update()
 
 		elif game_state["g_status"] == "finished":
@@ -105,17 +108,31 @@ class DrawCard:
 			0: (135, 520),
 			1: (385, 520),
 			2: (635, 520),
-			3: (985, 520),
+			3: (885, 520),
 			4: (1135, 520)
 		}
 
 	def draw(self, card, field):
-		place = places[field]
-		self.screen.blit(colors[card.color], place)
-		self.screen.blit(movement[card.val], place)
+		place = self.places[field]
+		self.screen.blit(self.background, place)
+		self.screen.blit(self.colors[card.color], place)
+		self.screen.blit(self.movement[card.val], place)
 
 if __name__ == "__main__":
 	gui = GUI("gracz1")
 	gui.start("YELLOW")
-	time.sleep(2)
+	time.sleep(1)
+	gui.go(
+		{
+			"g_status": "game",
+			"game_state": {
+				"board": False,
+				"players": {
+					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
+					"reszta": False
+				}
+			}
+		}
+	)
+	time.sleep(10)
 	gui.end()
