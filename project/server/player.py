@@ -1,4 +1,4 @@
-from card import Card
+from server.card import Card
 # from turtle import Turtle
 class Player:
 	def __init__(self, ip):
