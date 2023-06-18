@@ -1,3 +1,6 @@
+import pygame
+from server.card import Card
+
 class GUI:
 	def __init__(self, player_key): # tu sie musimy zastanowic jak z tym w, h
 		self.player_key = player_key
@@ -16,14 +19,17 @@ class GUI:
 	def end(self):
 		# sprawdzenie czy gracz wygral czy nie
 		pass
+
 	def go(self, game_state):
 		if self.last_state == game_state:
 			return
+		self.last_state = game_state
 
 		if game_state["g_status"] == "game":
 			state = game_state["game_state"]
 			self.draw_board.draw(state["board"])
 			self.draw_turtle.draw(state["players"])
+			pygame.display.update()
 
 		elif game_state["g_status"] == "finished":
 			pass # uzupelnic
@@ -31,25 +37,29 @@ class GUI:
 		else:
 			self.state = "error"
 
+
 class DrawBoard:
 	def __init__(self, screen):
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
-		self.fields = {
-			0 : (100, 100), # start
-			1 : (100, 20),
-			2 : (200, 100),
-			3 : (200, 200),
-			4 : (300, 100),
-			5 : (300, 200),
-			6 : (400, 100),
-			7 : (400, 200),
-			8 : (500, 100),
-			9 : (500, 200)
+		self.fields = { # miejsca powinny byc git, nie ma to jak GIMP
+			0: [1400, 330],  # start
+			1: [1216, 102],
+			2: [1160, 268],
+			3: [1035, 390],
+			4: [846, 274],
+			5: [672, 433],
+			6: [552, 292],
+			7: [390, 200],
+			8: [213, 360],
+			9: [10, 335]
 		}
 
-	def draw(self):
-		pass
+	def draw(self, state):
+		self.screen.blit(board, (0,0))
+		for i in len(state):
+			for j in len(state[i]):
+				self.draw_turtle.draw(state[i][j], (self.fields[i][0], self.fields[i][1] - i * 15))
 
 class DrawTurtle:
 	def __init__(self, screen):
@@ -63,10 +73,11 @@ class DrawTurtle:
 		self.screen = screen
 
 	def draw(self, turtle, place):
-		pass
+		self.screen.blit(images[turtle], place)
 
 class DrawCard:
 	def __init__(self, screen):
+		self.screen = screen
 		self.colors = {
 			"RAINBOW": pygame.image.load("crainbow.png"), # jak wyzej, obrazki potem zmienimy
 			"YELLOW": pygame.image.load("cyellow.png"),
@@ -93,5 +104,7 @@ class DrawCard:
 			4: (520, 1135)
 		}
 
-	def draw(self, card):
-		pass
+	def draw(self, card, field):
+		place = places[field]
+		self.screen.blit(colors[card.color], place)
+		self.screen.blit(movement[card.val], place)
