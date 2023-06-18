@@ -1,23 +1,27 @@
 import pygame
-from server.card import Card
+from card import Card
+import time
 
 class GUI:
 	def __init__(self, player_key): # tu sie musimy zastanowic jak z tym w, h
 		self.player_key = player_key
 		self.state = "not started"
 		self.last_state = False
-		self.SIZE = self.HEIGHT, self.WIDTH = (900, 1500)
+		self.SIZE = self.WIDTH, self.HEIGHT = (1500, 900)
 		self.screen = pygame.display.set_mode(self.SIZE)
 		pygame.display.set_caption("Turtles Game")
-		self.draw_board = DrawBoard(screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
-		self.draw_card = DrawCard(screen)
+		# self.draw_board = DrawBoard(self.screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
+		self.draw_card = DrawCard(self.screen)
 
 	def start(self, turtle):
 		# wyswietlenie zolwia danego gracza na duzym ekranie
 		self.my_turtle = turtle
+		pygame.init()
 
 	def end(self):
 		# sprawdzenie czy gracz wygral czy nie
+		pygame.quit()
+		exit()
 		pass
 
 	def go(self, game_state):
@@ -43,20 +47,20 @@ class DrawBoard:
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
 		self.fields = { # miejsca powinny byc git, nie ma to jak GIMP
-			0: [1400, 330],  # start
-			1: [1216, 102],
-			2: [1160, 268],
-			3: [1035, 390],
-			4: [846, 274],
-			5: [672, 433],
-			6: [552, 292],
-			7: [390, 200],
-			8: [213, 360],
-			9: [10, 335]
+			0: [330, 1400],  # start
+			1: [102, 1216],
+			2: [268, 1160],
+			3: [390, 1035],
+			4: [274, 846],
+			5: [433, 672],
+			6: [292, 552],
+			7: [200, 390],
+			8: [360, 213],
+			9: [335, 10]
 		}
 
 	def draw(self, state):
-		self.screen.blit(board, (0,0))
+		self.screen.blit(board, (0, 0))
 		for i in len(state):
 			for j in len(state[i]):
 				self.draw_turtle.draw(state[i][j], (self.fields[i][0], self.fields[i][1] - i * 15))
@@ -78,6 +82,7 @@ class DrawTurtle:
 class DrawCard:
 	def __init__(self, screen):
 		self.screen = screen
+		self.background = pygame.image.load("card_background.png")
 		self.colors = {
 			"RAINBOW": pygame.image.load("crainbow.png"), # jak wyzej, obrazki potem zmienimy
 			"YELLOW": pygame.image.load("cyellow.png"),
@@ -97,14 +102,20 @@ class DrawCard:
 		}
 
 		self.places = {
-			0: (520, 135),
-			1: (520, 385),
-			2: (520, 635),
-			3: (520, 985),
-			4: (520, 1135)
+			0: (135, 520),
+			1: (385, 520),
+			2: (635, 520),
+			3: (985, 520),
+			4: (1135, 520)
 		}
 
 	def draw(self, card, field):
 		place = places[field]
 		self.screen.blit(colors[card.color], place)
 		self.screen.blit(movement[card.val], place)
+
+if __name__ == "__main__":
+	gui = GUI("gracz1")
+	gui.start("YELLOW")
+	time.sleep(2)
+	gui.end()
