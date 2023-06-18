@@ -23,6 +23,15 @@ class Connector:
 		else:
 			self.connected = False
 
+	def card_on_table(self, card):
+		r = requests.post(self.url+"/card", data=json.dumps(card), headers=HEADERS)
+		if r.status_code == 200:
+			js = r.json()
+			return js
+		else:
+			print("code", r.status_code, "url", new_url)
+
+
 	def get_state(self):
 		new_url = self.url+"/getState"
 		r = requests.get(new_url)
@@ -35,7 +44,7 @@ class Connector:
 
 if __name__ == "__main__":
 	url = "http://localhost:5000"
-	conn = Connector(url, "Burek")
+	conn = Connector(url, "Burek") 
 	if conn.connected:
 		print("turtle", conn.turtle)
 		from time import time

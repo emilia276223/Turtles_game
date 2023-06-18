@@ -1,4 +1,5 @@
-from card import Card
+from server.card import Card
+# from card import Card
 # from turtle import Turtle
 class Player:
 	def __init__(self, ip):
@@ -19,6 +20,8 @@ class Player:
 		return self.cards
 
 	def remove_card(self, card):
+		# for c in self.cards:
+		# 	print(c, c==card)
 		self.cards.remove(card)
 
 	def get_state(self):
