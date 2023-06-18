@@ -24,6 +24,12 @@ class GUI:
 		exit()
 		pass
 
+	def is_card_deterministic(self, color, val):
+		if color == "RAINBOW":
+			if val != "^" and val != "^^":
+				return False
+		return True
+
 	def go(self, game_state):
 		if self.last_state == game_state:
 			return
@@ -37,6 +43,16 @@ class GUI:
 				self.draw_card.draw(card, i)
 				i += 1
 			pygame.display.update()
+			print("Choose card")
+			while True: # not clicked
+				events = pygame.event.get()
+				for e in events:
+					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
+						position = pygame.mouse.get_pos()
+						chosen = self.draw_card.chosen_card(position)
+						print(chosen)
+						if chosen:  # jesli zostala wybrana karta
+							return state["players"][self.player_key][chosen - 1]
 
 		elif game_state["g_status"] == "finished":
 			pass # uzupelnic
@@ -105,11 +121,11 @@ class DrawCard:
 		}
 
 		self.places = {
-			0: (135, 520),
-			1: (385, 520),
-			2: (635, 520),
-			3: (885, 520),
-			4: (1135, 520)
+			0: (135, 550),
+			1: (385, 550),
+			2: (635, 550),
+			3: (885, 550),
+			4: (1135, 550)
 		}
 
 	def draw(self, card, field):
@@ -118,12 +134,30 @@ class DrawCard:
 		self.screen.blit(self.colors[card.color], place)
 		self.screen.blit(self.movement[card.val], place)
 
+	def chosen_card(self, place):
+		x, y = place
+		if y > 850:
+			return False
+		if y < 550:
+			return False
+		if 135 < x < 365:
+			return 1
+		if 365 < x < 615:
+			return 2
+		if 635 < x < 865:
+			return 3
+		if 885 < x < 1115:
+			return 4
+		if 1135 < x < 1365:
+			return 5
+		return False
+
+
 if __name__ == "__main__":
 	gui = GUI("gracz1")
 	gui.start("YELLOW")
-	time.sleep(1)
-	gui.go(
-		{
+
+	print(gui.go({
 			"g_status": "game",
 			"game_state": {
 				"board": False,
@@ -132,7 +166,36 @@ if __name__ == "__main__":
 					"reszta": False
 				}
 			}
-		}
-	)
-	time.sleep(10)
+		}))
+	print(gui.go({
+			"g_status": "game",
+			"game_state": {
+				"board": False,
+				"players": {
+					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
+					"reszta": False
+				}
+			}
+		}))
+	print(gui.go({
+			"g_status": "game",
+			"game_state": {
+				"board": False,
+				"players": {
+					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
+					"reszta": False
+				}
+			}
+		}))
+	print(gui.go({
+			"g_status": "game",
+			"game_state": {
+				"board": False,
+				"players": {
+					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
+					"reszta": False
+				}
+			}
+		}))
+
 	gui.end()
