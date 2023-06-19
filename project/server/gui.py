@@ -122,7 +122,7 @@ class DrawBoard:
 		for i in range(len(state)):
 			for j in range(len(state[i])):
 				print(state[i][j], (self.fields[i][0], self.fields[i][1] - (j * 15)))
-				self.draw_turtle.draw(state[i][j], (self.fields[i][0], self.fields[i][1] - j * 15))
+				self.draw_turtle.draw(state[i][j], (self.fields[i][1],self.fields[i][0]  - j * 15))
 
 class DrawTurtle:
 	def __init__(self, screen):
