@@ -13,6 +13,8 @@ from server.game import Game
 
 from flask import Flask, render_template, request, flash
 import random
+from server.game import Game
+# from game import Game
 
 app = Flask(__name__)
 
@@ -41,8 +43,18 @@ class Server:
 		self.users = {}
 		self.game = None
 
-	def cart_table(self, card, ip):  # polozenie karty
-		print("user", ip, "gives card", card)
+	def card_table(self, card, ip):  # polozenie karty
+		c = None
+		for cp in self.game.players[ip].cards:
+			if cp.color == card["color"] and cp.val == card["val"]:
+				c = cp
+				break
+		if card["color"] == "RAINBOW":
+			self.game.card_on_desk(ip, c, card["choice"])
+		else:
+			self.game.card_on_desk(ip, c)
+		# akcja na game - klade karte na stole # TODO # done
+		print("user {} gives card {}".format(ip, card)) # print("user", ip, "gives card", card)
 
 	def user_init(self, ip, nick):
 		user = UserInfo(nick)
@@ -52,7 +64,10 @@ class Server:
 				self.turtles = ["YELLOW", "GREEN", "BLUE", "RED", "PURPLE"]
 				random.shuffle(self.turtles)
 			if len(self.users) == 5:
-				self.game = game_class()
+				users_ip = []
+				for ip in self.users:
+					users_ip.append(ip)
+				self.game = game_class(users_ip, 10) # TODO # done
 
 		turtle = self.turtles.pop()
 		user.turtle = turtle
@@ -64,12 +79,14 @@ class Server:
 		nl = []
 		for ip in self.users:
 			nl.append(self.users[ip].nick)
+		return nl
 
 	def get_users_info(self):
 		nl = []
 		for ip in self.users:
 			ui = self.users[ip]
 			nl.append([ui.nick, ui.turtle])
+		return nl
 
 	def get_state(self):
 		if self.game is None:
@@ -100,7 +117,6 @@ class UserInfo:
 		return self.nick + ", " + str(self.turtle)
 
 
-
 game_class = Game
 
 server = Server()
@@ -118,16 +134,16 @@ def getState():
 def client_init():
 	nick = request.json['name']  # obiekt request pochodzi od flaska poprzez @app.route
 	ip = request.remote_addr
-	print("user ", nick, " has been connected from", ip)
+	print("user {} has been connected from {}".format(nick, ip))
 	turtle = server.user_init(ip, nick)
 	return {"status": "connected", "turtle": turtle}
 
 
 @app.route('/card', methods=['POST'])
 def card_on_board():  # CZY TO JEST DOBRZE???
-	card = request.json['card']
-	server.cart_table(card)
-	return {"status": "card posted"}
+	card = request.json()
+	server.card_table(card) # TODO # done
+	return server.get_state()
 
 
 if __name__ == "__main__":
@@ -135,4 +151,31 @@ if __name__ == "__main__":
 	print(user)
 	user.turtle = "PINK"
 	print(user)
+	# test klasy serwer # TODO # done
+	card1 = {"color": "GREEN",
+			 "val": "++"}
+	card2 = {"color": "RAINBOW",
+			 "val": "+",
+			 "choice": "BLUE"}
+	s = Server()
+	s.user_init("1", "Adam")
+	s.user_init("2", "Borys")
+	s.user_init("3", "Cecylia")
+	s.user_init("4", "Dominik")
+	s.user_init("5", "Ewa")
+	print(s.get_nick_list())
+	print(s.get_users_info())
+	print(s.get_state())
+	c3 = s.game.whos_turn[0].get_cards()[0]
+	print(s.game.whos_turn[0].get_cards()[0])
+	card3 = {"color": c3.get_color(),
+			 "val": c3.get_val()}
+	if c3.get_color() == "RAINBOW":
+		card3["choice"] = "GREEN"
+	s.card_table(card3, "1")
+	print(s.get_state())
+# s.card_table(card1, "1")
+	# print(s.get_state())
+	# s.card_table(card2, "2")
+	# print(s.get_state())
 
