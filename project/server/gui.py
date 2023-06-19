@@ -24,6 +24,7 @@ class GUI:
 	def start(self, turtle):
 		# wyswietlenie zolwia danego gracza na duzym ekranie
 		self.my_turtle = turtle
+		self.draw_board.start(turtle)
 		pygame.init()
 
 	def end(self):
@@ -121,13 +122,25 @@ class DrawBoard:
 			9: [335, 10]
 		}
 
+		self.myturtles = {
+			"YELLOW": pygame.image.load("myyellowturtle.png"),
+			"RED": pygame.image.load("myredturtle.png"),
+			"BLUE": pygame.image.load("myblueturtle.png"),
+			"GREEN": pygame.image.load("mygreenturtle.png"),
+			"PURPLE": pygame.image.load("mypurpleturtle.png")
+		}
+
+	def start(self, turtle):
+		self.myturtle = self.myturtles[turtle]
+
 	def draw(self, state):
 		self.screen.blit(self.board, (0, 0))
+		self.screen.blit(self.myturtle, (0,0))
 		for j in range(len(state[0])):
-			self.draw_turtle.draw(state[0][j], (self.fields[0][1], self.fields[0][0] - j * 70))
+			self.draw_turtle.draw(state[0][j], (self.fields[0][1], self.fields[0][0] - j * 70)) # wyswietlane obok siebie
 		for i in range(1, len(state)):
 			for j in range(len(state[i])):
-				self.draw_turtle.draw(state[i][j], (self.fields[i][1],self.fields[i][0]  - j * 15))
+				self.draw_turtle.draw(state[i][j], (self.fields[i][1], self.fields[i][0] - j * 15)) # jedne na drugich
 
 class DrawTurtle:
 	def __init__(self, screen):
