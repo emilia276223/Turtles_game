@@ -1,4 +1,4 @@
-from server.card import Card
+from card import Card
 # from card import Card
 # from turtle import Turtle
 class Player:

@@ -1,5 +1,5 @@
 from typing import List, Any
-from server.field import Field, StartField
+from field import Field, StartField
 # from field import Field, StartField
 # from turtle import Turtle
 

@@ -33,19 +33,21 @@ class GUI:
 		pass
 
 	def ask_if_needed(self, color, val):
-		print("color = ", color, ", val =", val)
+		# print("color = ", color, ", val =", val)
 		if color == "RAINBOW":
-			print("kolor sie zgadza")
+			# print("kolor sie zgadza")
 			if (val != "^" and val != "^^"):
-				print("movement sie zgadza")
+				# print("movement sie zgadza")
 				# trzeba doprecyzowac, jakim zolwiem sie porusza
-				self.screen.blit(self.choose_image_background, (0,0))
-				self.screen.blit(self.choose_image, (0,0))
+				self.screen.blit(self.choose_image_background, (0, 0))
+				self.screen.blit(self.choose_image, (0, 0))
 				pygame.display.update()
 				# x = 0
 				while True:  # not clicked
 					events = pygame.event.get()
 					for e in events:
+						if e.type == pygame.QUIT:
+							self.end()
 						if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 							position = pygame.mouse.get_pos()
 							x, y = position
@@ -75,20 +77,22 @@ class GUI:
 				self.draw_card.draw(self.card_to_dict(card), i)
 				i += 1
 			pygame.display.update()
-			print("Choose card")
+			# print("Choose card")
 			while True: # not clicked
 				events = pygame.event.get()
 				for e in events:
+					if e.type == pygame.QUIT:
+							self.end()
 					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
 						position = pygame.mouse.get_pos()
 						chosen = self.draw_card.chosen_card(position)
-						print(chosen)
+						# print(chosen)
 						if chosen:  # jesli zostala wybrana karta
 							card = self.card_to_dict(state["players"][self.player_key][chosen - 1])
 							return {
 								"color": card["color"],
 								"val": card["val"],
-								"turtle": self.ask_if_needed(card["color"], card["val"])
+								"choice": self.ask_if_needed(card["color"], card["val"])
 							}
 
 
@@ -105,7 +109,7 @@ class DrawBoard:
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
 		self.fields = { # miejsca powinny byc git, nie ma to jak GIMP
-			0: [330, 1400],  # start
+			0: [380, 1400],  # start
 			1: [102, 1216],
 			2: [268, 1160],
 			3: [390, 1035],
@@ -119,9 +123,10 @@ class DrawBoard:
 
 	def draw(self, state):
 		self.screen.blit(self.board, (0, 0))
-		for i in range(len(state)):
+		for j in range(len(state[0])):
+			self.draw_turtle.draw(state[0][j], (self.fields[0][1], self.fields[0][0] - j * 70))
+		for i in range(1, len(state)):
 			for j in range(len(state[i])):
-				print(state[i][j], (self.fields[i][0], self.fields[i][1] - (j * 15)))
 				self.draw_turtle.draw(state[i][j], (self.fields[i][1],self.fields[i][0]  - j * 15))
 
 class DrawTurtle:
@@ -136,10 +141,10 @@ class DrawTurtle:
 		self.screen = screen
 
 	def draw(self, turtle, place):
-		print("wyswietlam", turtle)
+		# print("wyswietlam", turtle)
 		self.screen.blit(self.images[turtle], place)
 		pygame.display.update()
-		time.sleep(0.1)
+		# time.sleep(0.1)
 
 class DrawCard:
 	def __init__(self, screen):
