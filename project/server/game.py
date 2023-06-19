@@ -55,8 +55,8 @@ class Game:
         for key in self.players:
             players_state[key] = self.players[key].get_cards() # lista stanow kart graczy
         state = {
-            "board":self.board.get_state(),
-            "players":players_state
+            "board": self.board.get_state(),
+            "players": players_state
         }
         self.is_finished = self.board.is_finished
         if self.is_finished:

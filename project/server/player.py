@@ -20,9 +20,12 @@ class Player:
 		return self.cards
 
 	def remove_card(self, card):
-		# for c in self.cards:
-		# 	print(c, c==card)
-		self.cards.remove(card)
+		for c in self.cards:
+			if c.color == card.color and c.val == card.val:
+				self.cards.remove(c)
+				return True
+		return False
+		# self.cards.remove(card)
 
 	def get_state(self):
 		# slownik ladnie prezentujacy karty gracza

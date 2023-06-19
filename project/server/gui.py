@@ -2,6 +2,7 @@ import pygame
 from card import Card
 import time
 
+
 class GUI:
 	def __init__(self, player_key): # tu sie musimy zastanowic jak z tym w, h
 		self.player_key = player_key
@@ -98,7 +99,33 @@ class GUI:
 
 
 		elif game_state["g_status"] == "finished":
-			pass # uzupelnic
+			ranking = game_state["ranking"]
+			if ranking[0] == self.my_turtle:
+				self.screen.blit(pygame.image.load("wygrana.png"), (0,0))
+				pygame.display.update()
+			else:
+				self.screen.blit(pygame.image.load("przegrana.png"), (0,0))
+				pygame.display.update()
+				if ranking[0] == "YELLOW":
+					self.screen.blit(pygame.image.load("cyellow.png"), (655, 510))
+				if ranking[0] == "RED":
+					self.screen.blit(pygame.image.load("cred.png"), (655, 510))
+				if ranking[0] == "BLUE":
+					self.screen.blit(pygame.image.load("cblue.png"), (655, 510))
+				if ranking[0] == "GREEN":
+					self.screen.blit(pygame.image.load("cgreen.png"), (655, 510))
+				if ranking[0] == "PURPLE":
+					self.screen.blit(pygame.image.load("cpurple.png"), (655, 510))
+				pygame.display.update()
+
+			while True: # not clicked
+				events = pygame.event.get()
+				for e in events:
+					if e.type == pygame.QUIT:
+							self.end()
+					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
+						self.end()
+						return None
 
 		else:
 			self.state = "error"
@@ -160,6 +187,7 @@ class DrawTurtle:
 		# time.sleep(0.1)
 
 class DrawCard:
+
 	def __init__(self, screen):
 		self.screen = screen
 		self.background = pygame.image.load("card_background.png")
@@ -215,48 +243,21 @@ class DrawCard:
 
 
 if __name__ == "__main__":
-	gui = GUI("gracz1")
+	gui = GUI("a")
 	gui.start("YELLOW")
 
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE', 'GREEN'], 1: [], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: ["YELLOW", 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board":{0: ['YELLOW', 'BLUE', 'RED'], 1: ['GREEN'], 2: [ 'PURPLE'], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: [], 1: [], 2: [], 3: ['YELLOW', 'BLUE', 'RED', 'PURPLE', 'GREEN'], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
+	from game import Game
+	game = Game("a", 10)
+	effect = 1
+	state = game.get_state()
+	while not game.is_finished:
+		effect = gui.go({"g_status": "game",
+			"game_state": state})
+		game.card_on_desk("a", Card(effect["color"], effect["val"]), effect["choice"])
+		state = game.get_state()
 
+	gui.go({
+		"g_status": "finished",
+		"ranking": game.board.ranking
+	})
 	gui.end()

@@ -8,13 +8,9 @@ def getState():
 	# return render_template("getState.html")
 	return "get state"
 """
-from server.game import Game
-
-
 from flask import Flask, render_template, request, flash
 import random
 from server.game import Game
-# from game import Game
 
 app = Flask(__name__)
 
@@ -42,6 +38,7 @@ class Server:
 	def __init__(self):
 		self.users = {}
 		self.game = None
+		self.N = 1 # liczba potrzebnych graczy do gry
 
 	def card_table(self, card, ip):  # polozenie karty
 		c = None
@@ -63,7 +60,7 @@ class Server:
 			if len(self.users) == 1:
 				self.turtles = ["YELLOW", "GREEN", "BLUE", "RED", "PURPLE"]
 				random.shuffle(self.turtles)
-			if len(self.users) == 5:
+			if len(self.users) == self.N:
 				users_ip = []
 				for ip in self.users:
 					users_ip.append(ip)
