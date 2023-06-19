@@ -1,6 +1,6 @@
 from typing import List, Any
-from server.field import Field, StartField
-from server.turtle import Turtle
+from field import Field, StartField
+from turtle import Turtle
 
 # pozbyć sie klasy zolw, robimy napisy jak wczesniej
 class Board:
