@@ -1,13 +1,11 @@
-
-
-class Field:
+class Field: # klasa pole - pole przechowuje listę żółwi, które na nim stoją (w kolejności w jakiej były stawiane na to pole)
     def __init__(self):
         self.turtle_stack = []
 
-    def add_turtle(self, turtle):
+    def add_turtle(self, turtle): # dodanie żółwia do listy - żółw został postawiony na to pole
         self.turtle_stack.append(turtle)
 
-    def take_turtle(self, turtle):
+    def take_turtle(self, turtle): # usunięcie z listy żółwia wraz ze wszystkimi żółwiami stojącymi na nim - żółw został zabrany z tego pola
         i = 0
         while self.turtle_stack[i] != turtle:
             i += 1
@@ -15,15 +13,15 @@ class Field:
         self.turtle_stack[i:] = []
         return x.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
 
-    def get_state(self):
+    def get_state(self): # wypisuje aktualny stan pola - listę stojących na nim żółwi
         return self.turtle_stack.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
 
 
-class StartField(Field):
-    def __init__(self):
+class StartField(Field): # podklasa klasy pole - pole startowe
+    def __init__(self): # na początku gry stoją na nim wszystkie żółwie
         self.turtle_stack = ["YELLOW", "GREEN", "BLUE", "RED", "PURPLE"]
 
-    def take_turtle(self, turtle): # zabiera żółwia
+    def take_turtle(self, turtle): # usunięcie z listy żółwia - żółw został zabrany z tego pola
         i = 0
         while self.turtle_stack[i] != turtle:
             i += 1
