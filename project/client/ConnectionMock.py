@@ -1,4 +1,4 @@
-from app import Server
+from server.app import Server
 
 class ConnectionMock:
 	def __init__(self, url, nick):

@@ -1,5 +1,4 @@
 import pygame
-from card import Card
 import time
 
 

@@ -1,8 +1,7 @@
 import pygame as pygame
 from gui import GUI
 from connection import Connector
-from ConnectionMock import ConnectionMock
-from app import Server
+# from ConnectionMock import ConnectionMock
 
 connect_class = Connector # ConnectionMock
 class Client:
