@@ -10,7 +10,7 @@ def getState():
 """
 from flask import Flask, render_template, request, flash
 import random
-from server.game import Game
+from game import Game
 
 app = Flask(__name__)
 
@@ -133,7 +133,7 @@ def client_init():
 	ip = request.remote_addr
 	print("user {} has been connected from {}".format(nick, ip))
 	turtle = server.user_init(ip, nick)
-	return {"status": "connected", "turtle": turtle}
+	return {"status": "connected", "turtle": turtle, "ip": ip}
 
 
 @app.route('/card', methods=['POST'])

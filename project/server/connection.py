@@ -19,6 +19,7 @@ class Connector:
 			print(answer, j)
 			print(j["status"])
 			self.turtle = j["turtle"]
+			self.ip = j["ip"]
 			self.connected = True
 		else:
 			self.connected = False
