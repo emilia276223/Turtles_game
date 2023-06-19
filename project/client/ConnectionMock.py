@@ -1,4 +1,4 @@
-from app import Server
+from server.app import Server
 
 class ConnectionMock:
 	def __init__(self, url, nick):
@@ -7,6 +7,11 @@ class ConnectionMock:
 		self.server = Server()
 		self.turtle = self.server.user_init(self.ip, self.nick)
 
+	def card_to_dict(self, card):
+		return {
+			"color": card.color,
+			"val": card.val
+		}
 	def card_on_table(self, card):
 		self.server.card_table(card, self.ip)
 		return self.server.get_state()

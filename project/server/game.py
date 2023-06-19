@@ -53,7 +53,7 @@ class Game:
     def get_state(self):
         players_state = {} # []
         for key in self.players:
-            players_state[key] = self.players[key].get_cards() # lista stanow kart graczy
+            players_state[key] = self.players[key].get_state() # lista stanow kart graczy
         state = {
             "board": self.board.get_state(),
             "players": players_state

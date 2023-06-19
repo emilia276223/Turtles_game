@@ -28,8 +28,8 @@ class Player:
 		# self.cards.remove(card)
 
 	def get_state(self):
-		# slownik ladnie prezentujacy karty gracza
-		pass
+		state_cars_list = [c.get_state() for c in self.cards]
+		return state_cars_list
 
 if __name__ == "__main__":
 	# turtle1 = Turtle("GREEN")
