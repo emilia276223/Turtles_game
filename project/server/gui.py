@@ -221,7 +221,7 @@ if __name__ == "__main__":
 	print(gui.go({
 			"g_status": "game",
 			"game_state": {
-				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
+				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE', 'GREEN'], 1: [], 2: [], 3: [], 4: []},
 				"players": {
 					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
 					"reszta": False
@@ -241,7 +241,7 @@ if __name__ == "__main__":
 	print(gui.go({
 			"g_status": "game",
 			"game_state": {
-				"board":{0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
+				"board":{0: ['YELLOW', 'BLUE', 'RED'], 1: ['GREEN'], 2: [ 'PURPLE'], 3: [], 4: []},
 				"players": {
 					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
 					"reszta": False
@@ -251,7 +251,7 @@ if __name__ == "__main__":
 	print(gui.go({
 			"g_status": "game",
 			"game_state": {
-				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
+				"board": {0: [], 1: [], 2: [], 3: ['YELLOW', 'BLUE', 'RED', 'PURPLE', 'GREEN'], 4: []},
 				"players": {
 					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
 					"reszta": False
