@@ -1,4 +1,4 @@
-from server.card import Card
+from card import Card
 # from card import Card
 from random import shuffle
 
@@ -40,7 +40,7 @@ if __name__ == "__main__":
     def show(cards):
         print("[", end="")
         for c in cards:
-            print("(" + c.get_color() + ", " + c.get_val() + ")", end=", ")
+            print("(" + c.color + ", " + c.val + ")", end=", ")
         print("]")
 
     # l = [1, 5, 7]

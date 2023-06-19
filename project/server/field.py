@@ -19,21 +19,15 @@ class Field:
         return self.turtle_stack.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
 
 
-class StartField:
+class StartField(Field):
     def __init__(self):
         self.turtle_stack = ["YELLOW", "GREEN", "BLUE", "RED", "PURPLE"]
-
-    def add_turtle(self, turtle):
-        self.turtle_stack.append(turtle)
 
     def take_turtle(self, turtle): # zabiera żółwia
         i = 0
         while self.turtle_stack[i] != turtle:
             i += 1
         return [self.turtle_stack.pop(i)]
-
-    def get_state(self):
-        return self.turtle_stack.copy()
 
 
 if __name__=="__main__":

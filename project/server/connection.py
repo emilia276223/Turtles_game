@@ -52,5 +52,37 @@ if __name__ == "__main__":
 		for i in range(10):
 			print(conn.get_state())
 		print("time:", time()-t)
+		# polozenie do 20 kart lub konca gry
+		for _ in range(20):
+			pass
+			# sprawdzenie kart na ręku
+			# losowanie
+			# wybranie, danie karty
+			# sprawdzenie czy koniec gry
 	else:
 		print("not connected :(")
+
+	import random
+
+
+	# przy okazji bedziemy sprawdzac czy kladzenie karty dziala poprawnie
+	#
+	# koniec = False
+	# players = ["a"]
+	# colors = ["RED", "GREEN", "BLUE", "PURPLE", "YELLOW"]
+	# g = Game(players, 10)
+	# print(g.get_state())
+	# i = 0
+	# while not g.is_finished:
+	# 	p = players[0]
+	# 	c = random.choice(colors)
+	# 	card = g.players[p].cards[random.randint(0, 4)]
+	# 	g.card_on_desk(p, card, c)
+	# 	state = g.get_state()
+	# 	print(state)
+	# 	i += 1
+	# 	if i == 20:
+	# 		koniec = True
+	# 		break
+	# print("gra skonczyla sie po {} krokach".format(i))
+	# print("czy gra sie skonczyla? ", not koniec)

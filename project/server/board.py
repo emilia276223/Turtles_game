@@ -1,5 +1,5 @@
 from typing import List, Any
-from server.field import Field, StartField
+from field import Field, StartField
 # from field import Field, StartField
 # from turtle import Turtle
 
@@ -24,33 +24,30 @@ class Board:
 
     def finish(self):
         self.is_finished = True
+        self.ranking = self.get_ranking()
+
+    def get_ranking(self):
         ranking = []
         for i in range(self.FIELDS - 1, -1, -1):
             ranking.extend(self.fields[i].get_state())
-        self.ranking = ranking
-
+        return ranking
     def move_turtle(self, turtle, val): #poprawić
-        place = self.turtles.get(turtle)
-        # print(place)
+        place = self.turtles[turtle]
         if place is None:
             raise "turtle does not exist"
         moved = self.fields[place].take_turtle(turtle)
         if moved is str:
             moved = [moved]
-        # print(moved)
         if (self.FIELDS - 1) > place + val >= 0:
             for moved_turtle in moved:
-                # print(moved_turtle)
                 self.fields[place + val].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = place + val
         elif place + val < 0:
             for moved_turtle in moved:
-                # print(moved_turtle)
                 self.fields[0].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = 0
         else:
             for moved_turtle in moved:
-                # print(moved_turtle)
                 self.fields[self.FIELDS - 1].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = self.FIELDS - 1
             self.finish() #dopisac
@@ -91,11 +88,14 @@ class Board:
             raise "unknown card"
 
         # card color -> moved turtle
-        if card.color == "RAINBOW":
-            moved_turtle = color # poprawic potem
+        if card.val == "^" or card.val == "^^":
+            moved_turtle = self.get_ranking()[4]
+        elif card.color == "RAINBOW":
+            moved_turtle = color
         else:
             moved_turtle = card.color
 
+        print("moving turtle", moved_turtle, "by", shift)
         self.move_turtle(moved_turtle, shift)
 
 if __name__ == "__main__":

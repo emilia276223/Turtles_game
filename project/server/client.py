@@ -48,3 +48,7 @@ class TextUI:
 		else:
 			self.state = "error"
 			print("There is a problem: game already ended")
+
+if __name__ == "__main__":
+	ktos = Client()
+	

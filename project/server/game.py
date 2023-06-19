@@ -1,8 +1,8 @@
 from random import shuffle
-from server.player import Player
-from server.deck import Deck
-from server.card import Card
-from server.board import Board
+from player import Player
+from deck import Deck
+from card import Card
+from board import Board
 # from player import Player
 # from deck import Deck
 # from card import Card
@@ -55,8 +55,8 @@ class Game:
         for key in self.players:
             players_state[key] = self.players[key].get_cards() # lista stanow kart graczy
         state = {
-            "board":self.board.get_state(),
-            "players":players_state
+            "board": self.board.get_state(),
+            "players": players_state
         }
         self.is_finished = self.board.is_finished
         if self.is_finished:

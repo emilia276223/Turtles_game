@@ -2,6 +2,7 @@ import pygame
 from card import Card
 import time
 
+
 class GUI:
 	def __init__(self, player_key): # tu sie musimy zastanowic jak z tym w, h
 		self.player_key = player_key
@@ -24,6 +25,7 @@ class GUI:
 	def start(self, turtle):
 		# wyswietlenie zolwia danego gracza na duzym ekranie
 		self.my_turtle = turtle
+		self.draw_board.start(turtle)
 		pygame.init()
 
 	def end(self):
@@ -33,19 +35,21 @@ class GUI:
 		pass
 
 	def ask_if_needed(self, color, val):
-		print("color = ", color, ", val =", val)
+		# print("color = ", color, ", val =", val)
 		if color == "RAINBOW":
-			print("kolor sie zgadza")
+			# print("kolor sie zgadza")
 			if (val != "^" and val != "^^"):
-				print("movement sie zgadza")
+				# print("movement sie zgadza")
 				# trzeba doprecyzowac, jakim zolwiem sie porusza
-				self.screen.blit(self.choose_image_background, (0,0))
-				self.screen.blit(self.choose_image, (0,0))
+				self.screen.blit(self.choose_image_background, (0, 0))
+				self.screen.blit(self.choose_image, (0, 0))
 				pygame.display.update()
 				# x = 0
 				while True:  # not clicked
 					events = pygame.event.get()
 					for e in events:
+						if e.type == pygame.QUIT:
+							self.end()
 						if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 							position = pygame.mouse.get_pos()
 							x, y = position
@@ -75,25 +79,53 @@ class GUI:
 				self.draw_card.draw(self.card_to_dict(card), i)
 				i += 1
 			pygame.display.update()
-			print("Choose card")
+			# print("Choose card")
 			while True: # not clicked
 				events = pygame.event.get()
 				for e in events:
+					if e.type == pygame.QUIT:
+							self.end()
 					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
 						position = pygame.mouse.get_pos()
 						chosen = self.draw_card.chosen_card(position)
-						print(chosen)
+						# print(chosen)
 						if chosen:  # jesli zostala wybrana karta
 							card = self.card_to_dict(state["players"][self.player_key][chosen - 1])
 							return {
 								"color": card["color"],
 								"val": card["val"],
-								"turtle": self.ask_if_needed(card["color"], card["val"])
+								"choice": self.ask_if_needed(card["color"], card["val"])
 							}
 
 
 		elif game_state["g_status"] == "finished":
-			pass # uzupelnic
+			ranking = game_state["ranking"]
+			if ranking[0] == self.my_turtle:
+				self.screen.blit(pygame.image.load("wygrana.png"), (0,0))
+				pygame.display.update()
+			else:
+				self.screen.blit(pygame.image.load("przegrana.png"), (0,0))
+				pygame.display.update()
+				if ranking[0] == "YELLOW":
+					self.screen.blit(pygame.image.load("cyellow.png"), (655, 510))
+				if ranking[0] == "RED":
+					self.screen.blit(pygame.image.load("cred.png"), (655, 510))
+				if ranking[0] == "BLUE":
+					self.screen.blit(pygame.image.load("cblue.png"), (655, 510))
+				if ranking[0] == "GREEN":
+					self.screen.blit(pygame.image.load("cgreen.png"), (655, 510))
+				if ranking[0] == "PURPLE":
+					self.screen.blit(pygame.image.load("cpurple.png"), (655, 510))
+				pygame.display.update()
+
+			while True: # not clicked
+				events = pygame.event.get()
+				for e in events:
+					if e.type == pygame.QUIT:
+							self.end()
+					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
+						self.end()
+						return None
 
 		else:
 			self.state = "error"
@@ -105,7 +137,7 @@ class DrawBoard:
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
 		self.fields = { # miejsca powinny byc git, nie ma to jak GIMP
-			0: [330, 1400],  # start
+			0: [380, 1400],  # start
 			1: [102, 1216],
 			2: [268, 1160],
 			3: [390, 1035],
@@ -117,12 +149,25 @@ class DrawBoard:
 			9: [335, 10]
 		}
 
+		self.myturtles = {
+			"YELLOW": pygame.image.load("myyellowturtle.png"),
+			"RED": pygame.image.load("myredturtle.png"),
+			"BLUE": pygame.image.load("myblueturtle.png"),
+			"GREEN": pygame.image.load("mygreenturtle.png"),
+			"PURPLE": pygame.image.load("mypurpleturtle.png")
+		}
+
+	def start(self, turtle):
+		self.myturtle = self.myturtles[turtle]
+
 	def draw(self, state):
 		self.screen.blit(self.board, (0, 0))
-		for i in range(len(state)):
+		self.screen.blit(self.myturtle, (0,0))
+		for j in range(len(state[0])):
+			self.draw_turtle.draw(state[0][j], (self.fields[0][1], self.fields[0][0] - j * 70)) # wyswietlane obok siebie
+		for i in range(1, len(state)):
 			for j in range(len(state[i])):
-				print(state[i][j], (self.fields[i][0], self.fields[i][1] - (j * 15)))
-				self.draw_turtle.draw(state[i][j], (self.fields[i][1],self.fields[i][0]  - j * 15))
+				self.draw_turtle.draw(state[i][j], (self.fields[i][1], self.fields[i][0] - j * 15)) # jedne na drugich
 
 class DrawTurtle:
 	def __init__(self, screen):
@@ -136,12 +181,13 @@ class DrawTurtle:
 		self.screen = screen
 
 	def draw(self, turtle, place):
-		print("wyswietlam", turtle)
+		# print("wyswietlam", turtle)
 		self.screen.blit(self.images[turtle], place)
 		pygame.display.update()
-		time.sleep(0.1)
+		# time.sleep(0.1)
 
 class DrawCard:
+
 	def __init__(self, screen):
 		self.screen = screen
 		self.background = pygame.image.load("card_background.png")
@@ -197,48 +243,21 @@ class DrawCard:
 
 
 if __name__ == "__main__":
-	gui = GUI("gracz1")
+	gui = GUI("a")
 	gui.start("YELLOW")
 
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: ["YELLOW", 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board":{0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
-	print(gui.go({
-			"g_status": "game",
-			"game_state": {
-				"board": {0: ['YELLOW', 'BLUE', 'RED', 'PURPLE'], 1: ['GREEN'], 2: [], 3: [], 4: []},
-				"players": {
-					"gracz1": [Card("RAINBOW", "++"), Card("RED", "+"), Card("BLUE", "-"), Card("RAINBOW", "^^"), Card("GREEN", "++")],
-					"reszta": False
-				}
-			}
-		}))
+	from game import Game
+	game = Game("a", 10)
+	effect = 1
+	state = game.get_state()
+	while not game.is_finished:
+		effect = gui.go({"g_status": "game",
+			"game_state": state})
+		game.card_on_desk("a", Card(effect["color"], effect["val"]), effect["choice"])
+		state = game.get_state()
 
+	gui.go({
+		"g_status": "finished",
+		"ranking": game.board.ranking
+	})
 	gui.end()
