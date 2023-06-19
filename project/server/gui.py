@@ -4,13 +4,13 @@ import time
 
 
 class GUI:
-	def __init__(self, player_key):  # tu sie musimy zastanowic jak z tym w, h
-		self.player_key = player_key
+	def __init__(self, player_key):
+		self.player_key = player_key # ip gracza
 		self.state = "not started"
 		self.last_state = False
 		self.SIZE = self.WIDTH, self.HEIGHT = (1500, 900)
 		self.screen = pygame.display.set_mode(self.SIZE)
-		pygame.display.set_caption("Turtles Game")
+		pygame.display.set_caption("Turtles Game" + self.player_key)
 		self.draw_board = DrawBoard(self.screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
 		self.draw_card = DrawCard(self.screen)
 		self.choose_image = pygame.image.load("choosing.png")
@@ -75,6 +75,7 @@ class GUI:
 			state = game_state["game_state"]
 			self.draw_board.draw(state["board"])
 			i = 0
+			print(self.player_key, state["players"])
 			for card in state["players"][self.player_key]:
 				self.draw_card.draw(self.card_to_dict(card), i)
 				i += 1

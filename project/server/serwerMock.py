@@ -3,9 +3,10 @@ from game import Game
 from card import Card
 import random
 
-F = 5 # liczba pól, grafika jest na 10
+F = 10 # liczba pól, grafika jest na 10
 
 N = int(input("Podaj liczbe graczy (dziala tylko dla 1)"))
+
 player_info = {
 	"nick": None,
 	"gui": None,
@@ -20,7 +21,7 @@ nicks = []
 
 for i in range(N):
 	players.append(player_info)
-	players[i]["nick"] = input("Wpisz nick gracza " + str(i) + ":\n")
+	players[i]["nick"] = input("Wpisz nick gracza " + str(i + 1) + ":\n")
 	nicks.append(players[i]["nick"])
 	players[i]["gui"] = GUI(players[i]["nick"])
 	turtle = turtles.pop()

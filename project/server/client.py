@@ -1,41 +1,52 @@
 import pygame as pygame
 from gui import GUI
+from connection import Connector
+from ConnectionMock import ConnectionMock
+from app import Server
 
+connect_class = ConnectionMock
 class Client:
-	def __init__(self, conn): # tu sie musimy zastanowic jak z tym w, h
-		self.connector = conn
-		self.textUI = TestUI()
-		self.gui = GUI("PLAYER_KEY")
+	def __init__(self):
+		self.state = "waiting"
+		self.textUI = TextUI()
+		# self.conn = None
+		self.nick, url = self.textUI.start()
+		self.conn = connect_class(url, self.nick)
 
 	def play(self):
-		nick = self.textUI.start()
-		# trzeba przekazac nick do conn
-		while self.textUI.state == "waiting":
-			state = conn.get_state() # jeszcze nie wiadomo czy dziala
-			self.textUI.go(state)
+		if self.state == "waiting":
+			state = self.conn.get_state() # jeszcze nie wiadomo czy dziala
+			self.textUI.go_on(state)
+			if self.textUI.state == "game started":
+				self.gui = GUI(self.conn.ip)
+				print("GUI started")
+				self.gui.start(self.conn.turtle)
+				self.state = "game"
+			return
 		if self.textUI.state == "error":
 			return "error"
 
-		state = conn.get_state()  # jeszcze nie wiadomo czy dziala
-		gui.start(self.get_turtle(state))
-		while gui.state == "game":
-			state = conn.get_state() # jeszcze nie wiadomo czy dziala
-			self.gui.go(state)
-
-		state = conn.get_state()  # jeszcze nie wiadomo czy dziala
-		gui.end(state)
-
-	def get_turtle(self, state):
-		return "NOT YET"
+		state = self.conn.get_state()  # jeszcze nie wiadomo czy dziala
+		if self.state == "game":
+			card = self.gui.go(state)
+			game_state = self.conn.card_on_table(card)
+			if game_state["g_status"] == "finished":
+				self.state = "finished"
+				self.ranking = game_state["ranking"]
+				self.users_info = game_state["users_info"]
+				self.gui.end()
+		# else:
+		# 	self.gui.end()
 
 class TextUI:
 	def __init__(self):
-		self.state = "not started"
+		self.state = "waiting"
 	def start(self):
 		self.state = "waiting"
+		url = input("Input game IP:")
 		print("Set your nick:")
 		nick = input()
-		return nick
+		return (nick, url)
 
 	def go_on(self, state):
 		# jeszcze raczej nie dziala ale juz cos robi
@@ -50,5 +61,16 @@ class TextUI:
 			print("There is a problem: game already ended")
 
 if __name__ == "__main__":
-	ktos = Client()
+	# s = Server()
+	g1 = Client()
+	# g2 = Client(s)
+	# x = 0
+	while not g1.state == "finished":
+		g1.play()
+		# x += 1
+		# g2.play()
+	print("Game finished")
+	print("Ranking: ", g1.ranking)
+	print("Users info: ", g1.users_info)
+
 	
