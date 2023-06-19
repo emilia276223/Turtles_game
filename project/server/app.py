@@ -14,7 +14,7 @@ from game import Game
 
 app = Flask(__name__)
 
-NUMBER_OF_FIELDS = 5 # 10 eccomended because of GUI
+NUMBER_OF_FIELDS = 10  # 10 eccomended because of GUI
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -139,8 +139,9 @@ def client_init():
 
 @app.route('/card', methods=['POST'])
 def card_on_board():  # CZY TO JEST DOBRZE???
-	card = request.json()
-	server.card_table(card) # TODO # done
+	card = request.json
+	ip = request.remote_addr
+	server.card_table(card, ip) # TODO # done
 	return server.get_state()
 
 

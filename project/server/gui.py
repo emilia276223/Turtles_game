@@ -16,11 +16,6 @@ class GUI:
 		self.choose_image = pygame.image.load("choosing.png")
 		self.choose_image_background = pygame.image.load("Choose_background.png")
 
-	def card_to_dict(self, card):
-		return {
-			"color": card.color,
-			"val": card.val
-		}
 
 	def start(self, turtle):
 		# wyswietlenie zolwia danego gracza na duzym ekranie
@@ -77,7 +72,7 @@ class GUI:
 			i = 0
 			# print(self.player_key, state["players"])
 			for card in state["players"][self.player_key]:
-				self.draw_card.draw(self.card_to_dict(card), i)
+				self.draw_card.draw(card, i)
 				i += 1
 			pygame.display.update()
 			# print("Choose card")
@@ -91,7 +86,7 @@ class GUI:
 						chosen = self.draw_card.chosen_card(position)
 						# print(chosen)
 						if chosen:  # jesli zostala wybrana karta
-							card = self.card_to_dict(state["players"][self.player_key][chosen - 1])
+							card = state["players"][self.player_key][chosen - 1]
 							return {
 								"color": card["color"],
 								"val": card["val"],
@@ -163,12 +158,13 @@ class DrawBoard:
 	def draw(self, state):
 		self.screen.blit(self.board, (0, 0))
 		self.screen.blit(self.myturtle, (0, 0))
-		for j in range(len(state[0])):
-			self.draw_turtle.draw(state[0][j],
+		# print(state)
+		for j in range(len(state["0"])):
+			self.draw_turtle.draw(state["0"][j],
 								  (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
 		for i in range(1, len(state)):
-			for j in range(len(state[i])):
-				self.draw_turtle.draw(state[i][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
+			for j in range(len(state[str(i)])):
+				self.draw_turtle.draw(state[str(i)][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
 
 
 class DrawTurtle:

@@ -4,7 +4,7 @@ from connection import Connector
 from ConnectionMock import ConnectionMock
 from app import Server
 
-connect_class = ConnectionMock
+connect_class = Connector # ConnectionMock
 class Client:
 	def __init__(self):
 		self.state = "waiting"
@@ -27,6 +27,7 @@ class Client:
 			return "error"
 
 		state = self.conn.get_state()  # jeszcze nie wiadomo czy dziala
+		print(state)
 		if self.state == "game":
 			card = self.gui.go(state)
 			game_state = self.conn.card_on_table(card)
