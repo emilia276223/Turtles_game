@@ -8,6 +8,8 @@ def getState():
 	# return render_template("getState.html")
 	return "get state"
 """
+from server.game import Game
+
 
 from flask import Flask, render_template, request, flash
 import random
@@ -115,7 +117,6 @@ class UserInfo:
 		return self.nick + ", " + str(self.turtle)
 
 
-# game_class = GameMock
 game_class = Game
 
 server = Server()
