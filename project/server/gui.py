@@ -4,7 +4,7 @@ import time
 
 
 class GUI:
-	def __init__(self, player_key): # tu sie musimy zastanowic jak z tym w, h
+	def __init__(self, player_key):  # tu sie musimy zastanowic jak z tym w, h
 		self.player_key = player_key
 		self.state = "not started"
 		self.last_state = False
@@ -16,12 +16,12 @@ class GUI:
 		self.choose_image = pygame.image.load("choosing.png")
 		self.choose_image_background = pygame.image.load("Choose_background.png")
 
-
 	def card_to_dict(self, card):
-		return{
+		return {
 			"color": card.color,
 			"val": card.val
 		}
+
 	def start(self, turtle):
 		# wyswietlenie zolwia danego gracza na duzym ekranie
 		self.my_turtle = turtle
@@ -67,9 +67,9 @@ class GUI:
 		return None
 
 	def go(self, game_state):
-		if self.last_state == game_state:
-			return
-		self.last_state = game_state
+		# if self.last_state == game_state:
+		# 	raise "same state again"
+		# self.last_state = game_state
 
 		if game_state["g_status"] == "game":
 			state = game_state["game_state"]
@@ -80,12 +80,12 @@ class GUI:
 				i += 1
 			pygame.display.update()
 			# print("Choose card")
-			while True: # not clicked
+			while True:  # not clicked
 				events = pygame.event.get()
 				for e in events:
 					if e.type == pygame.QUIT:
-							self.end()
-					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
+						self.end()
+					if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 						position = pygame.mouse.get_pos()
 						chosen = self.draw_card.chosen_card(position)
 						# print(chosen)
@@ -97,14 +97,13 @@ class GUI:
 								"choice": self.ask_if_needed(card["color"], card["val"])
 							}
 
-
 		elif game_state["g_status"] == "finished":
 			ranking = game_state["ranking"]
 			if ranking[0] == self.my_turtle:
-				self.screen.blit(pygame.image.load("wygrana.png"), (0,0))
+				self.screen.blit(pygame.image.load("wygrana.png"), (0, 0))
 				pygame.display.update()
 			else:
-				self.screen.blit(pygame.image.load("przegrana.png"), (0,0))
+				self.screen.blit(pygame.image.load("przegrana.png"), (0, 0))
 				pygame.display.update()
 				if ranking[0] == "YELLOW":
 					self.screen.blit(pygame.image.load("cyellow.png"), (655, 510))
@@ -118,12 +117,12 @@ class GUI:
 					self.screen.blit(pygame.image.load("cpurple.png"), (655, 510))
 				pygame.display.update()
 
-			while True: # not clicked
+			while True:  # not clicked
 				events = pygame.event.get()
 				for e in events:
 					if e.type == pygame.QUIT:
-							self.end()
-					if e.type == pygame.MOUSEBUTTONUP:  #jesli klikniecie
+						self.end()
+					if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 						self.end()
 						return None
 
@@ -136,7 +135,7 @@ class DrawBoard:
 		self.screen = screen
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
-		self.fields = { # miejsca powinny byc git, nie ma to jak GIMP
+		self.fields = {  # miejsca powinny byc git, nie ma to jak GIMP
 			0: [380, 1400],  # start
 			1: [102, 1216],
 			2: [268, 1160],
@@ -162,18 +161,21 @@ class DrawBoard:
 
 	def draw(self, state):
 		self.screen.blit(self.board, (0, 0))
-		self.screen.blit(self.myturtle, (0,0))
+		self.screen.blit(self.myturtle, (0, 0))
 		for j in range(len(state[0])):
-			self.draw_turtle.draw(state[0][j], (self.fields[0][1], self.fields[0][0] - j * 70)) # wyswietlane obok siebie
+			self.draw_turtle.draw(state[0][j],
+								  (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
 		for i in range(1, len(state)):
 			for j in range(len(state[i])):
-				self.draw_turtle.draw(state[i][j], (self.fields[i][1], self.fields[i][0] - j * 15)) # jedne na drugich
+				self.draw_turtle.draw(state[i][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
+
 
 class DrawTurtle:
 	def __init__(self, screen):
 		self.images = {
 			"YELLOW": pygame.image.load("yellow.png"),
-			"RED": pygame.image.load("red.png"), # to sie zmieni jak mi zacznie dzialac program do rysowania bo na razie odmawia wspolpracy z internetem
+			"RED": pygame.image.load("red.png"),
+			# to sie zmieni jak mi zacznie dzialac program do rysowania bo na razie odmawia wspolpracy z internetem
 			"BLUE": pygame.image.load("blue.png"),
 			"GREEN": pygame.image.load("green.png"),
 			"PURPLE": pygame.image.load("purple.png")
@@ -184,7 +186,8 @@ class DrawTurtle:
 		# print("wyswietlam", turtle)
 		self.screen.blit(self.images[turtle], place)
 		pygame.display.update()
-		# time.sleep(0.1)
+	# time.sleep(0.1)
+
 
 class DrawCard:
 
@@ -192,7 +195,7 @@ class DrawCard:
 		self.screen = screen
 		self.background = pygame.image.load("card_background.png")
 		self.colors = {
-			"RAINBOW": pygame.image.load("crainbow.png"), # jak wyzej, obrazki potem zmienimy
+			"RAINBOW": pygame.image.load("crainbow.png"),  # jak wyzej, obrazki potem zmienimy
 			"YELLOW": pygame.image.load("cyellow.png"),
 			"RED": pygame.image.load("cred.png"),
 			"BLUE": pygame.image.load("cblue.png"),
@@ -247,11 +250,13 @@ if __name__ == "__main__":
 	gui.start("YELLOW")
 
 	from game import Game
-	game = Game("a", 10)
+
+	game = Game(["a"], 10)
 	effect = 1
 	state = game.get_state()
 	while not game.is_finished:
-		effect = gui.go({"g_status": "game",
+		effect = gui.go({
+			"g_status": "game",
 			"game_state": state})
 		game.card_on_desk("a", Card(effect["color"], effect["val"]), effect["choice"])
 		state = game.get_state()

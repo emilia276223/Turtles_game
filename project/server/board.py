@@ -95,7 +95,7 @@ class Board:
         else:
             moved_turtle = card.color
 
-        print("moving turtle", moved_turtle, "by", shift)
+        # print("moving turtle", moved_turtle, "by", shift)
         self.move_turtle(moved_turtle, shift)
 
 if __name__ == "__main__":
