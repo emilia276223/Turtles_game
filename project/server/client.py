@@ -19,7 +19,7 @@ class Client:
 			self.textUI.go_on(state)
 			if self.textUI.state == "game started":
 				self.gui = GUI(self.conn.ip)
-				print("GUI started")
+				# print("GUI started")
 				self.gui.start(self.conn.turtle)
 				self.state = "game"
 			return
@@ -31,9 +31,13 @@ class Client:
 			card = self.gui.go(state)
 			game_state = self.conn.card_on_table(card)
 			if game_state["g_status"] == "finished":
+				self.gui.go(game_state)
 				self.state = "finished"
 				self.ranking = game_state["ranking"]
 				self.users_info = game_state["users_info"]
+				print("Game finished")
+				print("Ranking: ", g1.ranking)
+				print("Users info: ", g1.users_info)
 				self.gui.end()
 		# else:
 		# 	self.gui.end()
@@ -69,8 +73,5 @@ if __name__ == "__main__":
 		g1.play()
 		# x += 1
 		# g2.play()
-	print("Game finished")
-	print("Ranking: ", g1.ranking)
-	print("Users info: ", g1.users_info)
 
 	

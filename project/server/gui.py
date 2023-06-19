@@ -75,7 +75,7 @@ class GUI:
 			state = game_state["game_state"]
 			self.draw_board.draw(state["board"])
 			i = 0
-			print(self.player_key, state["players"])
+			# print(self.player_key, state["players"])
 			for card in state["players"][self.player_key]:
 				self.draw_card.draw(self.card_to_dict(card), i)
 				i += 1

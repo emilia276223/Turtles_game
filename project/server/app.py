@@ -14,6 +14,7 @@ from game import Game
 
 app = Flask(__name__)
 
+NUMBER_OF_FIELDS = 5 # 10 eccomended because of GUI
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -51,7 +52,7 @@ class Server:
 		else:
 			self.game.card_on_desk(ip, c)
 		# akcja na game - klade karte na stole # TODO # done
-		print("user {} gives card {}".format(ip, card)) # print("user", ip, "gives card", card)
+		# print("user {} gives card {}".format(ip, card)) # print("user", ip, "gives card", card)
 
 	def user_init(self, ip, nick):
 		user = UserInfo(nick)
@@ -64,7 +65,7 @@ class Server:
 				users_ip = []
 				for ip in self.users:
 					users_ip.append(ip)
-				self.game = game_class(users_ip, 10) # TODO # done
+				self.game = game_class(users_ip, NUMBER_OF_FIELDS) # TODO # done
 
 		turtle = self.turtles.pop()
 		user.turtle = turtle
@@ -95,7 +96,7 @@ class Server:
 			if self.game.is_finished:
 				return {
 					"g_status": "finished",
-					"ranking": self.game.ranking,
+					"ranking": self.game.get_state(),
 					"users_info": self.get_users_info()  # ma zwrócić informację o tym kto jakim żółwiem grał
 				}
 			else:
