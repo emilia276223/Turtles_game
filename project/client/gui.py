@@ -60,21 +60,37 @@ class GUI:
 									return "PURPLE"
 		return None
 
+	def draw(self, game_state):
+		state = game_state["game_state"]
+		# drawing board
+		self.draw_board.draw(state["board"])
+
+		# drawing all cards
+		i = 0
+		for card in state["players"][self.player_key]:
+			self.draw_card.draw(card, i)
+			i += 1
+
+		pygame.display.update()
+
 	def go(self, game_state):
 		# if self.last_state == game_state:
 		# 	raise "same state again"
 		# self.last_state = game_state
 
 		if game_state["g_status"] == "game":
+			self.draw(game_state)
 			state = game_state["game_state"]
-			self.draw_board.draw(state["board"])
-			i = 0
-			# print(self.player_key, state["players"])
-			for card in state["players"][self.player_key]:
-				self.draw_card.draw(card, i)
-				i += 1
-			pygame.display.update()
+			# state = game_state["game_state"]
+			# # self.draw_board.draw(state["board"])
+			# i = 0
+			# # print(self.player_key, state["players"])
+			# for card in state["players"][self.player_key]:
+			# 	self.draw_card.draw(card, i)
+			# 	i += 1
+			# pygame.display.update()
 			# print("Choose card")
+
 			while True:  # not clicked
 				events = pygame.event.get()
 				for e in events:

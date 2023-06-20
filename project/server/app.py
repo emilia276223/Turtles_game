@@ -15,6 +15,7 @@ from game import Game
 app = Flask(__name__)
 
 NUMBER_OF_FIELDS = 10  # 10 eccomended because of GUI
+NUMBER_OF_REQUIRED_PLAYERS = 1
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -39,7 +40,7 @@ class Server:
 	def __init__(self):
 		self.users = {}
 		self.game = None
-		self.N = 1 # liczba potrzebnych graczy do gry
+		self.N = NUMBER_OF_REQUIRED_PLAYERS # liczba potrzebnych graczy do gry
 
 	def card_table(self, card, ip):  # polozenie karty
 		c = None
@@ -102,7 +103,8 @@ class Server:
 			else:
 				return {
 					"g_status": "game",
-					"game_state": self.game.get_state()
+					"game_state": self.game.get_state(),
+					"turn": self.game.get_ip_of_next()
 				}
 
 

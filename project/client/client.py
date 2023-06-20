@@ -1,9 +1,12 @@
 import pygame as pygame
 from gui import GUI
 from connection import Connector
+import time
 # from ConnectionMock import ConnectionMock
 
 connect_class = Connector # ConnectionMock
+
+
 class Client:
 	def __init__(self):
 		self.state = "waiting"
@@ -28,7 +31,10 @@ class Client:
 		state = self.conn.get_state()  # jeszcze nie wiadomo czy dziala
 		print(state)
 		if self.state == "game":
-			card = self.gui.go(state)
+			if state["turn"] == self.conn.ip:
+				card = self.gui.go(state)
+			else:
+				self.gui.draw()
 			game_state = self.conn.card_on_table(card)
 			if game_state["g_status"] == "finished":
 				self.gui.go(game_state)
@@ -58,20 +64,16 @@ class TextUI:
 			self.state = "game started"
 		elif state["g_status"] == "not started":
 			print("Still waiting for participants: ")
-			print(state["users"].len, "participants at the moment")
+			print(len(state["users"]), "participants at the moment")
+			time.sleep(3)
 			self.state = "waiting"
 		else:
 			self.state = "error"
 			print("There is a problem: game already ended")
 
 if __name__ == "__main__":
-	# s = Server()
 	g1 = Client()
-	# g2 = Client(s)
-	# x = 0
 	while not g1.state == "finished":
 		g1.play()
-		# x += 1
-		# g2.play()
 
 	
