@@ -1,23 +1,20 @@
 import requests
 import json
 
-
 HEADERS = {'Content-type': 'application/json', 'Accept': 'text/plain'}
 
 
-class Connector:
+class Connector: # klasa odpowiadająca za komunikację między klientem a serwerem
 	def __init__(self, url, nick):
+		# potrzebne informacje:
 		self.url = "http://" + url + ":5000"
 		data = {"name": nick}
 		new_url = self.url+"/init"
 		r = requests.post(new_url, data=json.dumps(data), headers=HEADERS)
 		status = r.status_code
-		# print("status", status)
 		if status == 200:  # zapytanie rest wykonało się poprawnie
 			answer = r.content
 			j = r.json()
-			# print(answer, j)
-			# print(j["status"])
 			self.turtle = j["turtle"]
 			self.ip = j["ip"]
 			self.connected = True
@@ -25,7 +22,7 @@ class Connector:
 			self.connected = False
 			print("ERROR")
 
-	def card_on_table(self, card):
+	def card_on_table(self, card): # podanie serwerowi informacji o wyłożeniu danej karty
 		new_url = self.url+"/card"
 		r = requests.post(new_url, data=json.dumps(card), headers=HEADERS)
 		if r.status_code == 200:
@@ -35,7 +32,7 @@ class Connector:
 			print("code", r.status_code, "url", new_url)
 
 
-	def get_state(self):
+	def get_state(self): # odczytanie stanu gry od serwera
 		new_url = self.url+"/getState"
 		r = requests.get(new_url)
 		if r.status_code == 200:
@@ -45,7 +42,7 @@ class Connector:
 			print("code", r.status_code, "url", new_url)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # testy
 	url = "localhost"
 	conn = Connector(url, "Burek") 
 	if conn.connected:
@@ -64,28 +61,3 @@ if __name__ == "__main__":
 			# sprawdzenie czy koniec gry
 	else:
 		print("not connected :(")
-
-	import random
-
-
-	# przy okazji bedziemy sprawdzac czy kladzenie karty dziala poprawnie
-	#
-	# koniec = False
-	# players = ["a"]
-	# colors = ["RED", "GREEN", "BLUE", "PURPLE", "YELLOW"]
-	# g = Game(players, 10)
-	# print(g.get_state())
-	# i = 0
-	# while not g.is_finished:
-	# 	p = players[0]
-	# 	c = random.choice(colors)
-	# 	card = g.players[p].cards[random.randint(0, 4)]
-	# 	g.card_on_desk(p, card, c)
-	# 	state = g.get_state()
-	# 	print(state)
-	# 	i += 1
-	# 	if i == 20:
-	# 		koniec = True
-	# 		break
-	# print("gra skonczyla sie po {} krokach".format(i))
-	# print("czy gra sie skonczyla? ", not koniec)

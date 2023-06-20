@@ -1,5 +1,6 @@
 from server.app import Server
 
+# potrzebne jedynie do testów
 class ConnectionMock:
 	def __init__(self, url, nick):
 		self.ip = "mock_ip"  # to chyba bedzie trzeba zmienic ale to sie jeszcze okaze
