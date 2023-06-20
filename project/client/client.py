@@ -33,9 +33,9 @@ class Client:
 		if self.state == "game":
 			if state["turn"] == self.conn.ip:
 				card = self.gui.go(state)
+				game_state = self.conn.card_on_table(card)
 			else:
 				self.gui.draw(state)
-			game_state = self.conn.card_on_table(card)
 			if game_state["g_status"] == "finished":
 				self.gui.go(game_state)
 				self.state = "finished"
