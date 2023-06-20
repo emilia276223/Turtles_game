@@ -34,17 +34,18 @@ class Client:
 			if state["turn"] == self.conn.ip:
 				card = self.gui.go(state)
 				game_state = self.conn.card_on_table(card)
+				if game_state["g_status"] == "finished":
+					self.gui.go(game_state)
+					self.state = "finished"
+					self.ranking = game_state["ranking"]
+					self.users_info = game_state["users_info"]
+					print("Game finished")
+					print("Ranking: ", g1.ranking)
+					print("Users info: ", g1.users_info)
+					self.gui.end()
 			else:
 				self.gui.draw(state)
-			if game_state["g_status"] == "finished":
-				self.gui.go(game_state)
-				self.state = "finished"
-				self.ranking = game_state["ranking"]
-				self.users_info = game_state["users_info"]
-				print("Game finished")
-				print("Ranking: ", g1.ranking)
-				print("Users info: ", g1.users_info)
-				self.gui.end()
+
 		# else:
 		# 	self.gui.end()
 
@@ -76,4 +77,3 @@ if __name__ == "__main__":
 	while not g1.state == "finished":
 		g1.play()
 
-	
