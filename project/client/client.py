@@ -40,14 +40,13 @@ class Client:
 				time.sleep(0.7) # how frequently is refreshed, can be changed by more frequency results in more visible
 
 		if game_state["g_status"] == "finished":
-			self.gui.go(game_state)
 			self.state = "finished"
 			self.ranking = game_state["ranking"]
 			self.users_info = game_state["users_info"]
-			self.gui.end()
 			print("Game finished")
 			print("Ranking: ", g1.ranking)
 			print("Users info: ", g1.users_info)
+			self.gui.go(game_state)
 
 class TextUI:
 	def __init__(self):

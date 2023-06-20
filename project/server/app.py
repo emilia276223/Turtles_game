@@ -4,7 +4,7 @@ from game import Game
 
 app = Flask(__name__)
 
-NUMBER_OF_FIELDS = 10  # 10 eccomended because of GUI
+NUMBER_OF_FIELDS = 5 # 10 eccomended because of GUI
 NUMBER_OF_REQUIRED_PLAYERS = 2
 
 class GameMock:  # do testow
