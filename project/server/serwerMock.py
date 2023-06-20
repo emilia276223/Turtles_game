@@ -1,4 +1,4 @@
-# dodatkowy plik na czas testow
+# dodatkowy plik do testow
 
 from gui import GUI
 from game import Game

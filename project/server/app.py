@@ -4,8 +4,8 @@ from game import Game
 
 app = Flask(__name__)
 
-NUMBER_OF_FIELDS = 10 # 10 eccomended because of GUI
-NUMBER_OF_REQUIRED_PLAYERS = 2 # from 1 to 5
+NUMBER_OF_FIELDS = 10 # 10 najlepiej, ponieważ tyle jest wyświetlone w interfejsie graficznym
+NUMBER_OF_REQUIRED_PLAYERS = 2 # od 1 do 5, liczba graczy
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -19,20 +19,17 @@ class GameMock:  # do testow
 			self.is_finished = True
 		return {"data": "mock data"}
 
-	# dodać z 3 różne rzeczywiste stany odpowiednio na środek gry i koniec
-
 	def card_on_desk(self, player, card):  # zwraca dokładnie tę samą kartę
-		# cadd on s
 		return card
 
 
-class Server:
+class Server: # klasa tworząca serwer
 	def __init__(self):
 		self.users = {}
 		self.game = None
-		self.N = NUMBER_OF_REQUIRED_PLAYERS # liczba potrzebnych graczy do gry
+		self.N = NUMBER_OF_REQUIRED_PLAYERS # liczba graczy w grze
 
-	def card_table(self, card, ip):  # polozenie karty
+	def card_table(self, card, ip):  # gracz kładzie kartę => przesuwa żółwiem
 		c = None
 		for cp in self.game.players[ip].cards:
 			if cp.color == card["color"] and cp.val == card["val"]:
@@ -42,10 +39,8 @@ class Server:
 			self.game.card_on_desk(ip, c, card["choice"])
 		else:
 			self.game.card_on_desk(ip, c)
-		# akcja na game - klade karte na stole # TODO # done
-		# print("user {} gives card {}".format(ip, card)) # print("user", ip, "gives card", card)
 
-	def user_init(self, ip, nick):
+	def user_init(self, ip, nick): # dołączenie nowego gracza do gry, przydzielenie mu żółwia
 		user = UserInfo(nick)
 		if self.game is None:
 			self.users[ip] = user
@@ -62,22 +57,21 @@ class Server:
 		user.turtle = turtle
 		return turtle
 
-	# print(self.users)
-
-	def get_nick_list(self):
+	def get_nick_list(self): # zwrócenie listy nicków graczy
 		nl = []
 		for ip in self.users:
 			nl.append(self.users[ip].nick)
 		return nl
 
-	def get_users_info(self):
+	def get_users_info(self): # zwrócenie informacji o graczach i przydzielonych im żółwiach
 		nl = []
 		for ip in self.users:
 			ui = self.users[ip]
 			nl.append([ui.nick, ui.turtle])
 		return nl
 
-	def get_state(self):
+	def get_state(self): # przekazanie stanu gry
+		# stan z Game() z dodanymi odpowiednimi informacjami lub stan mówiący, że jest przed lub po grze
 		if self.game is None:
 			return {
 				"g_status": "not started",
@@ -98,7 +92,7 @@ class Server:
 				}
 
 
-class UserInfo:
+class UserInfo: # informacje o graczu (nick, żółw)
 	def __init__(self, nick):
 		self.nick = nick
 		self.turtle = None
@@ -107,12 +101,14 @@ class UserInfo:
 		return self.nick + ", " + str(self.turtle)
 
 
-game_class = Game
+# utworzenie serwera z odpowiednią grą
+
+game_class = Game # GameMock do niektórych testów
 
 server = Server()
 
 
-@app.route("/getState")
+@app.route("/getState") # przez to wysyłany jest stan gry
 def getState():
 	# return render_template("getState.html")
 	state = server.get_state()
@@ -129,11 +125,11 @@ def client_init():
 	return {"status": "connected", "turtle": turtle, "ip": ip}
 
 
-@app.route('/card', methods=['POST'])
-def card_on_board():  # CZY TO JEST DOBRZE???
+@app.route('/card', methods=['POST']) # przez to jest przesyłana informacja o wybranej karcie
+def card_on_board():
 	card = request.json
 	ip = request.remote_addr
-	server.card_table(card, ip) # TODO # done
+	server.card_table(card, ip)
 	return server.get_state()
 
 

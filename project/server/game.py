@@ -24,20 +24,25 @@ class Game: # klasa gra - koordynuje przebieg gry: kolejność graczy, ich tury,
         return self.whos_turn[self.licznik].ip
 
     def turn(self, player, card, color=None): # przebieg tury gracza
-        self.board.accept_card(card, color) # karta rusza żółwiem
-        player.remove_card(card) # zabieramy tą karte z reki gracza
-        self.deck.throw_card(card) # wrzucamy ją na stos kart odrzuconych
-        player.add_card(self.deck.take_card()) # gracz dobiera nową kartę
+        # poruszenie żółwia, odrzucenie karty przez gracza i danie mu nowejS
+        self.board.accept_card(card, color)
+        player.remove_card(card)
+        self.deck.throw_card(card)
+        player.add_card(self.deck.take_card())
 
     def card_on_desk(self, ip_player, card, color=None): # zagranie karty przez gracza
         who = self.whos_turn[self.licznik].ip
-        if ip_player == who: # jesli właściwy gracz zagrał to przeprowadzamy ruch i zwracamy stan gry
+
+        # jesli właściwy gracz zagrał to przeprowadzamy ruch i zwracamy stan gry
+        if ip_player == who:
             self.turn(self.players[ip_player], card, color)
             self.licznik += 1
             if len(self.whos_turn) == self.licznik:
                 self.licznik = 0
             return self.get_state()
-        else: # gdy zagrał gracz który nie ma teraz ruchu nic się nie dzieje
+
+        # gdy zagrał gracz który nie ma teraz ruchu nic się nie dzieje
+        else:
             return None
 
     def get_state(self): # stan gry - zwraca aktualny stan planszy i lista stanow kart graczy, a gdy koniec gry zwraca ranking
@@ -67,14 +72,10 @@ if __name__ == "__main__": # testy
         while not g.is_finished:
             p = players[i%5]
             c = random.choice(colors)
-            # print("++++++++++++++++")
             card = g.players[p].cards[random.randint(0,4)]
-            # print(card)
             g.card_on_desk(p,card,c)
-            # print("*********")
             state = g.get_state()
             print(state)
-            # print("ktory krok gry ", i)
             i += 1
             if i == 200:
                 koniec = False

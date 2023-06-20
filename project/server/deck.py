@@ -2,9 +2,13 @@ from card import Card
 from random import shuffle
 
 class Deck: # klasa talia kart - przechowuje stos kart do dobierania i stos kart odrzuconych
-    def __init__(self): # na początku gry dodaje do talii kart odpowiednia ilość różnych rodzajów kart i tasuje karty
+    def __init__(self):
+
+        # stworzenie talii kart i stosu kart odrzuconych
         self.deck_stack = []
         self.used_cards = []
+
+        # dodanie to talii wszystkich kart i posortowanie jej
         colors = ["YELLOW", "BLUE", "GREEN", "RED", "PURPLE"]
         for color in colors:
             for i in range(5):
@@ -26,7 +30,9 @@ class Deck: # klasa talia kart - przechowuje stos kart do dobierania i stos kart
         if len(self.deck_stack) < 1:
             raise "error - deck_stack is empty"
         else:
-            if len(self.deck_stack) == 1: # w razie gdy skończą się karty do dobierania (zostanie ostatnia) tasuje karty odrzucone i dodaje je do stosu do dobierania więc stos kart odrzuconych zostaje pusty
+            # gdy zostaje wzięta ostatnia karta z kart to dobrania
+            if len(self.deck_stack) == 1:
+                # karty z stosu kart odrzuconych są tasowane i przeniesione do kart do dobierania
                 shuffle(self.used_cards)
                 self.deck_stack = self.deck_stack + self.used_cards
                 self.used_cards = []
@@ -42,11 +48,6 @@ if __name__ == "__main__": # testy
             print("(" + c.color + ", " + c.val + ")", end=", ")
         print("]")
 
-    # l = [1, 5, 7]
-    # x = l
-    # shuffle(l)
-    # print(x)
-    # print(l)
     d = Deck()
     reka = []
     for i in range(5):

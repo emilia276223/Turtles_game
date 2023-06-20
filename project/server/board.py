@@ -1,13 +1,17 @@
 from typing import List, Any
 from field import Field, StartField
 
-class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (klasy Pole), między którymi przechodzą żółwie
+class Board: #klasa plansza - przechowuje informacje o umiejscowieniu żółwi oraz odpowiednio je przesuwa
     def __init__(self, FIELDS):
+
+        # pola, które przechowują żółwie, które na nich są
         self.FIELDS = FIELDS
         self.fields = []
         self.fields.append(StartField())
         for _ in range(1, FIELDS):
             self.fields.append(Field())
+
+        # spis umiejscowienia żółwi
         self.turtles = {
             "YELLOW": 0,
             "BLUE": 0,
@@ -26,12 +30,13 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         for i in range(self.FIELDS - 1, -1, -1):
             ranking.extend(self.fields[i].get_state())
         return ranking
-    def move_turtle(self, turtle, val): #poprawić # przesuwamy żółwia z pola, na którym się znajduje o podaną wartość do przodu lub do tyłu
+
+    def move_turtle(self, turtle, val): # przesuwamy danego żółwia o daną ilość pól (w granicach planszy)
         place = self.turtles[turtle]
         if place is None:
             raise "turtle does not exist"
         moved = self.fields[place].take_turtle(turtle)
-        if moved is str:
+        if moved is str: # sprawdzic czy potrzebne
             moved = [moved]
         if (self.FIELDS - 1) > place + val >= 0:
             for moved_turtle in moved:
@@ -45,16 +50,16 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
             for moved_turtle in moved:
                 self.fields[self.FIELDS - 1].add_turtle(moved_turtle)
                 self.turtles[moved_turtle] = self.FIELDS - 1
-            self.finish() #dopisac
+            self.finish()
 
-    def get_state(self): # aktualny stan planszy - słownik kolejnych pól z ich stanem - na którym polu które żółwie stoją i w jakiej kolejności
+    def get_state(self): # aktualny stan planszy - słownik stanów kolejnych pól (kolejności żółwi na każdym)
         state = {}
         for i in range(0, self.FIELDS):
             state[i] = self.fields[i].get_state()
         return state
 
     def accept_card(self, card, color=None): # przesunięcie żółwi na planszy zgodnie z informacją na zagranej karcie
-        # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
+        # ustalenie przesunięcia żółwia
         if card.val == "++" or card.val == "^^":
             shift = 2
         elif card.val == "+" or card.val == "^":
@@ -66,15 +71,17 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         else:
             raise "unknown card"
 
+        # ustalenie koloru przesuwanego żółwia
         if card.val == "^" or card.val == "^^":
+            # jeśli poruszany żółw zależy od kolejności na planszy
             moved_turtle = self.get_ranking()[4]
         elif card.color == "RAINBOW":
+            # jeśli gracz mógł wybrać poruszanego żółwia
             moved_turtle = color
         else:
             moved_turtle = card.color
 
         self.move_turtle(moved_turtle, shift)
-
 
 
 if __name__ == "__main__": # testy
@@ -127,23 +134,14 @@ if __name__ == "__main__": # testy
     print("\ngra druga:")
     board = Board(5)  # przecinek w princie wstawia dodatkową spację
     board.accept_card(g2)
-    # print(board.get_state())
     board.accept_card(p2)
-    # print(board.get_state())
     board.accept_card(p_1)
-    # print(board.get_state())
     board.accept_card(p2)
-    # print(board.get_state())
     board.accept_card(y1)
-    # print(board.get_state())
     board.accept_card(b1)
-    # print(board.get_state())
     board.accept_card(y_1)
-    # print(board.get_state())
     board.accept_card(y2)
-    # print(board.get_state())
     board.accept_card(g2)
-    # print(board.get_state())
 
     print("powinno być: g, y, p, ( b / r dowolnie)")
 #  (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
