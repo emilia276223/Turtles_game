@@ -25,12 +25,13 @@ class Client:
 				self.gui.start(self.conn.turtle)
 				self.state = "game"
 			return
+
 		if self.textUI.state == "error":
 			return "error"
 
+		# if we are past (waiting = textUI) state, so game is already started:
 		game_state = self.conn.get_state()
-		# print(state)
-		if self.state == "game":
+		if game_state["g_status"] == "game":  # if the game has not ended
 			if game_state["turn"] == self.conn.ip:
 				card = self.gui.go(game_state)
 				game_state = self.conn.card_on_table(card)
@@ -47,9 +48,6 @@ class Client:
 			print("Ranking: ", g1.ranking)
 			print("Users info: ", g1.users_info)
 			self.gui.end()
-
-		# else:
-		# 	self.gui.end()
 
 class TextUI:
 	def __init__(self):
