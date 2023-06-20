@@ -1,3 +1,5 @@
+# dodatkowy plik na czas testow
+
 from gui import GUI
 from game import Game
 from card import Card

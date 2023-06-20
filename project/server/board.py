@@ -18,16 +18,16 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         }
         self.is_finished = False
 
-    def finish(self):
+    def finish(self): # gdy gra się kończy tworzymy ranking
         self.is_finished = True
         self.ranking = self.get_ranking()
 
-    def get_ranking(self):
+    def get_ranking(self): # tworzenie rankingu - w jakiej kolejności żółwie były od mety na końcu gry
         ranking = []
         for i in range(self.FIELDS - 1, -1, -1):
             ranking.extend(self.fields[i].get_state())
         return ranking
-    def move_turtle(self, turtle, val): #poprawić
+    def move_turtle(self, turtle, val): #poprawić # przesuwamy żółwia z pola, na którym się znajduje o podaną wartość do przodu lub do tyłu
         place = self.turtles[turtle]
         if place is None:
             raise "turtle does not exist"
@@ -48,24 +48,12 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
                 self.turtles[moved_turtle] = self.FIELDS - 1
             self.finish() #dopisac
 
-    def get_state(self):
+    def get_state(self): # aktualny stan planszy - słownik kolejnych pól z ich stanem - na którym polu które żółwie stoją i w jakiej kolejności
         state = {}
         for i in range(0, self.FIELDS):
             state[i] = self.fields[i].get_state()
         return state
 
-    def get_last_s(self): # mam wrazenie ze moze sie przydac dla gry, jesli nie to sie usunie
-        x = self.fields[0].get_state()
-        # print(x)
-        if len(x) > 0:
-            return x
-        for f in self.fields:
-            x = f.get_state()
-            # print(x)
-            if len(x) > 0:
-                return [x[(len(x) - 1)]] # opakowane w liste zeby zawsze zwracalo liste elementow
-
-# (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
     def accept_card(self, card, color=None): # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
         # card value -> number
         if card.val == "++" or card.val == "^^":
