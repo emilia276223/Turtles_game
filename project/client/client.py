@@ -35,7 +35,7 @@ class Client:
 				card = self.gui.go(state)
 				game_state = self.conn.card_on_table(card)
 			else:
-				self.gui.draw(state)
+				self.gui.show(state)
 				game_state = state
 				time.sleep(0.3)
 			if game_state["g_status"] == "finished":
