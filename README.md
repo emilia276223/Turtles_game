@@ -12,7 +12,7 @@ Potrzebne:
 ```
 flask run --host=0.0.0.0
 ```
-W związku z tym, że pliki __init__ znajdujące się w katalogach server i client uniemożliwiają poprawne działanie flaska należy uruchomić go w katalogu nie zawierającym tych plików.
+W związku z tym, że pliki \__init__ znajdujące się w katalogach server i client uniemożliwiają poprawne działanie flaska należy uruchomić go w katalogu nie zawierającym tych plików.
 
 ### Podłączenie klienta do serwera
 
