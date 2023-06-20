@@ -3,7 +3,7 @@ class Card: # klasa karta - karta ma kolor i wartość, która jest informacją,
         self.color = color
         self.val = val
 
-    def get_state(self):
+    def get_state(self): # wypisywanie karty jako słownika
         return{
             "color": self.color,
             "val": self.val

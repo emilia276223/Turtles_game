@@ -1,20 +1,11 @@
-"""
-from flask import Flask, render_template, request, flash
-
-app = Flask(__name__)
-
-@app.route("/getState")
-def getState():
-	# return render_template("getState.html")
-	return "get state"
-"""
 from flask import Flask, render_template, request, flash
 import random
 from game import Game
 
 app = Flask(__name__)
 
-NUMBER_OF_FIELDS = 10  # 10 eccomended because of GUI
+NUMBER_OF_FIELDS = 5 # 10 eccomended because of GUI
+NUMBER_OF_REQUIRED_PLAYERS = 2
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -39,7 +30,7 @@ class Server:
 	def __init__(self):
 		self.users = {}
 		self.game = None
-		self.N = 1 # liczba potrzebnych graczy do gry
+		self.N = NUMBER_OF_REQUIRED_PLAYERS # liczba potrzebnych graczy do gry
 
 	def card_table(self, card, ip):  # polozenie karty
 		c = None
@@ -102,7 +93,8 @@ class Server:
 			else:
 				return {
 					"g_status": "game",
-					"game_state": self.game.get_state()
+					"game_state": self.game.get_state(),
+					"turn": self.game.get_ip_of_next()
 				}
 
 
@@ -145,7 +137,7 @@ def card_on_board():  # CZY TO JEST DOBRZE???
 	return server.get_state()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # testy
 	user = UserInfo("Adam")
 	print(user)
 	user.turtle = "PINK"
@@ -173,8 +165,4 @@ if __name__ == "__main__":
 		card3["choice"] = "GREEN"
 	s.card_table(card3, "1")
 	print(s.get_state())
-# s.card_table(card1, "1")
-	# print(s.get_state())
-	# s.card_table(card2, "2")
-	# print(s.get_state())
 

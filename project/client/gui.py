@@ -14,6 +14,7 @@ class GUI:
 		self.draw_card = DrawCard(self.screen)
 		self.choose_image = pygame.image.load("choosing.png")
 		self.choose_image_background = pygame.image.load("Choose_background.png")
+		self.not_your_turn_image = pygame.image.load("not_your_turn.png")
 
 
 	def start(self, turtle):
@@ -60,30 +61,42 @@ class GUI:
 									return "PURPLE"
 		return None
 
-	def go(self, game_state):
-		# if self.last_state == game_state:
-		# 	raise "same state again"
-		# self.last_state = game_state
+	def show(self, game_state):
+		state = game_state["game_state"]
+		self.draw_board.draw(state["board"])
+		self.screen.blit(self.not_your_turn_image, (0, 0))
+		pygame.display.update()
 
+	def go(self, game_state):
+
+		# if during a game
 		if game_state["g_status"] == "game":
 			state = game_state["game_state"]
+
+			# drawing board
 			self.draw_board.draw(state["board"])
+
+			# drawing all cards
 			i = 0
-			# print(self.player_key, state["players"])
 			for card in state["players"][self.player_key]:
 				self.draw_card.draw(card, i)
 				i += 1
 			pygame.display.update()
-			# print("Choose card")
+
+			# choosing card to play
 			while True:  # not clicked
 				events = pygame.event.get()
 				for e in events:
+					# makes closing the window during game possible
 					if e.type == pygame.QUIT:
 						self.end()
+
+					# cheching if click was on card
 					if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 						position = pygame.mouse.get_pos()
 						chosen = self.draw_card.chosen_card(position)
-						# print(chosen)
+
+						# if there was a card chosen then returning it (with additional information if needed)
 						if chosen:  # jesli zostala wybrana karta
 							card = state["players"][self.player_key][chosen - 1]
 							return {
@@ -92,11 +105,16 @@ class GUI:
 								"choice": self.ask_if_needed(card["color"], card["val"])
 							}
 
+		# if game already ended and we want to show results
 		elif game_state["g_status"] == "finished":
 			ranking = game_state["ranking"]
+
+			# if the player won
 			if ranking[0] == self.my_turtle:
 				self.screen.blit(pygame.image.load("wygrana.png"), (0, 0))
 				pygame.display.update()
+
+			# if the player lost then we show wich turtle won
 			else:
 				self.screen.blit(pygame.image.load("przegrana.png"), (0, 0))
 				pygame.display.update()
@@ -112,6 +130,7 @@ class GUI:
 					self.screen.blit(pygame.image.load("cpurple.png"), (655, 510))
 				pygame.display.update()
 
+			# we wait for a player to click so that we make sure they see result of the game
 			while True:  # not clicked
 				events = pygame.event.get()
 				for e in events:
@@ -121,6 +140,7 @@ class GUI:
 						self.end()
 						return None
 
+		# if there was something wrong we return error
 		else:
 			self.state = "error"
 
@@ -130,7 +150,7 @@ class DrawBoard:
 		self.screen = screen
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
-		self.fields = {  # miejsca powinny byc git, nie ma to jak GIMP
+		self.fields = {  # places in witch turtles on the board will be places thepending on field they are in
 			0: [380, 1400],  # start
 			1: [102, 1216],
 			2: [268, 1160],
@@ -159,8 +179,8 @@ class DrawBoard:
 		self.screen.blit(self.myturtle, (0, 0))
 		# print(state)
 		for j in range(len(state["0"])):
-			self.draw_turtle.draw(state["0"][j],
-								  (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
 		for i in range(1, len(state)):
 			for j in range(len(state[str(i)])):
 				self.draw_turtle.draw(state[str(i)][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
@@ -241,7 +261,7 @@ class DrawCard:
 		return False
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": #testy
 	gui = GUI("a")
 	gui.start("YELLOW")
 

@@ -35,7 +35,7 @@ class Deck: # klasa talia kart - przechowuje stos kart do dobierania i stos kart
     def throw_card(self, card): # dodaje kartę do stosu kart odrzuconych (gracz zagrał kartę)
         self.used_cards.append(card)
 
-if __name__ == "__main__":
+if __name__ == "__main__": # testy
     def show(cards):
         print("[", end="")
         for c in cards:

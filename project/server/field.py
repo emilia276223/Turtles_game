@@ -11,10 +11,10 @@ class Field: # klasa pole - pole przechowuje listę żółwi, które na nim stoj
             i += 1
         x = self.turtle_stack[i:]
         self.turtle_stack[i:] = []
-        return x.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
+        return x.copy()
 
     def get_state(self): # wypisuje aktualny stan pola - listę stojących na nim żółwi
-        return self.turtle_stack.copy() # dodalam copy, zeby nikt inny nie mogl tego zmienic (nie dzialalo mi bo przypadkiem zmienilam w board
+        return self.turtle_stack.copy()
 
 
 class StartField(Field): # podklasa klasy pole - pole startowe
@@ -28,7 +28,7 @@ class StartField(Field): # podklasa klasy pole - pole startowe
         return [self.turtle_stack.pop(i)]
 
 
-if __name__=="__main__":
+if __name__=="__main__": # testy
 
     f = Field()
     f.add_turtle("YELLOW")

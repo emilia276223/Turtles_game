@@ -1,7 +1,7 @@
 from typing import List, Any
 from field import Field, StartField
 
-class Board:
+class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (klasy Pole), między którymi przechodzą żółwie
     def __init__(self, FIELDS):
         self.FIELDS = FIELDS
         self.fields = []
@@ -17,7 +17,6 @@ class Board:
             "PURPLE": 0
         }
         self.is_finished = False
-        # self.end_consumer = end_consumer # funkcja wyliczajaca wygrywajacego na podstawie listy rankingowej zolwi
 
     def finish(self):
         self.is_finished = True

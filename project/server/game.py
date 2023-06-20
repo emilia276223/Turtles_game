@@ -30,6 +30,8 @@ class Game:
             for p in self.players:
                 self.players[p].add_card(self.deck.take_card())
 
+    def get_ip_of_next(self):
+        return self.whos_turn[self.licznik].get_ip()
     def turn(self, player, card, color=None):
         self.board.accept_card(card, color) # karta rusza zlowiem
         player.remove_card(card) # zabieramy ta karte z reki

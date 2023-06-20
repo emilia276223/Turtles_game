@@ -1,9 +1,12 @@
 import pygame as pygame
 from gui import GUI
 from connection import Connector
+import time
 # from ConnectionMock import ConnectionMock
 
 connect_class = Connector # ConnectionMock
+
+
 class Client:
 	def __init__(self):
 		self.state = "waiting"
@@ -22,25 +25,28 @@ class Client:
 				self.gui.start(self.conn.turtle)
 				self.state = "game"
 			return
+
 		if self.textUI.state == "error":
 			return "error"
 
-		state = self.conn.get_state()  # jeszcze nie wiadomo czy dziala
-		print(state)
-		if self.state == "game":
-			card = self.gui.go(state)
-			game_state = self.conn.card_on_table(card)
-			if game_state["g_status"] == "finished":
-				self.gui.go(game_state)
-				self.state = "finished"
-				self.ranking = game_state["ranking"]
-				self.users_info = game_state["users_info"]
-				print("Game finished")
-				print("Ranking: ", g1.ranking)
-				print("Users info: ", g1.users_info)
-				self.gui.end()
-		# else:
-		# 	self.gui.end()
+		# if we are past (waiting = textUI) state, so game is already started:
+		game_state = self.conn.get_state()
+		if game_state["g_status"] == "game":  # if the game has not ended
+			if game_state["turn"] == self.conn.ip:
+				card = self.gui.go(game_state)
+				game_state = self.conn.card_on_table(card)
+			else:
+				self.gui.show(game_state)
+				time.sleep(0.7) # how frequently is refreshed, can be changed by more frequency results in more visible
+
+		if game_state["g_status"] == "finished":
+			self.state = "finished"
+			self.ranking = game_state["ranking"]
+			self.users_info = game_state["users_info"]
+			print("Game finished")
+			print("Ranking: ", g1.ranking)
+			print("Users info: ", g1.users_info)
+			self.gui.go(game_state)
 
 class TextUI:
 	def __init__(self):
@@ -52,26 +58,22 @@ class TextUI:
 		nick = input()
 		return (nick, url)
 
-	def go_on(self, state):
+	def go_on(self, state): # dopóki gra się nie rozpoczęła wypisuje informacje o czekaniu na graczy
 		# jeszcze raczej nie dziala ale juz cos robi
 		if state["g_status"] == "game":
 			self.state = "game started"
 		elif state["g_status"] == "not started":
 			print("Still waiting for participants: ")
-			print(state["users"].len, "participants at the moment")
+			print(len(state["users"]), "participants at the moment")
+			time.sleep(3)
 			self.state = "waiting"
 		else:
 			self.state = "error"
 			print("There is a problem: game already ended")
 
 if __name__ == "__main__":
-	# s = Server()
-	g1 = Client()
-	# g2 = Client(s)
-	# x = 0
+	# uruchomienie gry
+	g1 = Client() # stworzenie klienta (gracza)
 	while not g1.state == "finished":
-		g1.play()
-		# x += 1
-		# g2.play()
+		g1.play() # odswieżenie gry
 
-	
