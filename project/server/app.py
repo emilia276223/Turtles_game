@@ -4,8 +4,8 @@ from game import Game
 
 app = Flask(__name__)
 
-NUMBER_OF_FIELDS = 5 # 10 eccomended because of GUI
-NUMBER_OF_REQUIRED_PLAYERS = 2
+NUMBER_OF_FIELDS = 10 # 10 eccomended because of GUI
+NUMBER_OF_REQUIRED_PLAYERS = 2 # from 1 to 5
 
 class GameMock:  # do testow
 	def __init__(self):
@@ -157,8 +157,8 @@ if __name__ == "__main__": # testy
 	print(s.get_nick_list())
 	print(s.get_users_info())
 	print(s.get_state())
-	c3 = s.game.whos_turn[0].get_cards()[0]
-	print(s.game.whos_turn[0].get_cards()[0])
+	c3 = s.game.whos_turn[0].cards[0]
+	print(s.game.whos_turn[0].cards[0])
 	card3 = {"color": c3.get_color(),
 			 "val": c3.get_val()}
 	if c3.get_color() == "RAINBOW":

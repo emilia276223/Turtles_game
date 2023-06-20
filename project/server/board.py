@@ -8,7 +8,6 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         self.fields.append(StartField())
         for _ in range(1, FIELDS):
             self.fields.append(Field())
-        # print(len(self.fields))
         self.turtles = {
             "YELLOW": 0,
             "BLUE": 0,
@@ -18,16 +17,16 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         }
         self.is_finished = False
 
-    def finish(self):
+    def finish(self): # gdy gra się kończy tworzymy ranking
         self.is_finished = True
         self.ranking = self.get_ranking()
 
-    def get_ranking(self):
+    def get_ranking(self): # tworzenie rankingu - w jakiej kolejności żółwie były od mety na końcu gry
         ranking = []
         for i in range(self.FIELDS - 1, -1, -1):
             ranking.extend(self.fields[i].get_state())
         return ranking
-    def move_turtle(self, turtle, val): #poprawić
+    def move_turtle(self, turtle, val): #poprawić # przesuwamy żółwia z pola, na którym się znajduje o podaną wartość do przodu lub do tyłu
         place = self.turtles[turtle]
         if place is None:
             raise "turtle does not exist"
@@ -48,42 +47,25 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
                 self.turtles[moved_turtle] = self.FIELDS - 1
             self.finish() #dopisac
 
-    def get_state(self):
+    def get_state(self): # aktualny stan planszy - słownik kolejnych pól z ich stanem - na którym polu które żółwie stoją i w jakiej kolejności
         state = {}
         for i in range(0, self.FIELDS):
             state[i] = self.fields[i].get_state()
         return state
 
-    def get_last_s(self): # mam wrazenie ze moze sie przydac dla gry, jesli nie to sie usunie
-        x = self.fields[0].get_state()
-        # print(x)
-        if len(x) > 0:
-            return x
-        for f in self.fields:
-            x = f.get_state()
-            # print(x)
-            if len(x) > 0:
-                return [x[(len(x) - 1)]] # opakowane w liste zeby zawsze zwracalo liste elementow
-
-# (poprawienie boarda tak jak bylo ustalone + dodanie kart, ale na razie tylko prostych (bez rainbow))
-    def accept_card(self, card, color=None): # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
-        # card value -> number
+    def accept_card(self, card, color=None): # przesunięcie żółwi na planszy zgodnie z informacją na zagranej karcie
+        # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
         if card.val == "++" or card.val == "^^":
             shift = 2
-            # print("++")
         elif card.val == "+" or card.val == "^":
             shift = 1
-            # print("+")
         elif card.val == "-":
             shift = -1
-            # print("-")
         elif card.val == "--":
             shift = -2
-            # print("--")
         else:
             raise "unknown card"
 
-        # card color -> moved turtle
         if card.val == "^" or card.val == "^^":
             moved_turtle = self.get_ranking()[4]
         elif card.color == "RAINBOW":
@@ -91,12 +73,12 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         else:
             moved_turtle = card.color
 
-        # print("moving turtle", moved_turtle, "by", shift)
         self.move_turtle(moved_turtle, shift)
 
-if __name__ == "__main__":
-    from card import Card
 
+
+if __name__ == "__main__": # testy
+    from card import Card
     def print_end(ranking):
         print(ranking)
 
@@ -189,7 +171,7 @@ if __name__ == "__main__":
     # WAŻNE - założyłam, że to gra zadba o to, żeby dostarczyć odpowiednią informację o kolorze jesli jest RAINBOW,
     # w tym kiedy jest ^ lub ^^ (bo jesli jest więcej niż 1 na starcie to można wybrać, na którego działa
 
-    board = Board(5)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)
     board.move_turtle("YELLOW", 2)
     board.move_turtle("PURPLE", 3)
     board.move_turtle("GREEN", 2)

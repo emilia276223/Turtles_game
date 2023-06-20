@@ -9,6 +9,6 @@ class Card: # klasa karta - karta ma kolor i wartość, która jest informacją,
             "val": self.val
         }
 
-    def __str__(self): # wypisywanie karty (kolor i wartość)
+    def __str__(self): # wypisywanie karty
         return self.color + " " + self.val
     
