@@ -8,7 +8,6 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         self.fields.append(StartField())
         for _ in range(1, FIELDS):
             self.fields.append(Field())
-        # print(len(self.fields))
         self.turtles = {
             "YELLOW": 0,
             "BLUE": 0,
@@ -54,24 +53,19 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
             state[i] = self.fields[i].get_state()
         return state
 
-    def accept_card(self, card, color=None): # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
-        # card value -> number
+    def accept_card(self, card, color=None): # przesunięcie żółwi na planszy zgodnie z informacją na zagranej karcie
+        # zakladam ze jesli jest wiecej niz 1 ostatni (np kilka na starcie) to mam podane ktory
         if card.val == "++" or card.val == "^^":
             shift = 2
-            # print("++")
         elif card.val == "+" or card.val == "^":
             shift = 1
-            # print("+")
         elif card.val == "-":
             shift = -1
-            # print("-")
         elif card.val == "--":
             shift = -2
-            # print("--")
         else:
             raise "unknown card"
 
-        # card color -> moved turtle
         if card.val == "^" or card.val == "^^":
             moved_turtle = self.get_ranking()[4]
         elif card.color == "RAINBOW":
@@ -79,12 +73,12 @@ class Board: #klasa plansza - przechowuje informacje o stanie planszy, ma pola (
         else:
             moved_turtle = card.color
 
-        # print("moving turtle", moved_turtle, "by", shift)
         self.move_turtle(moved_turtle, shift)
 
-if __name__ == "__main__":
-    from card import Card
 
+
+if __name__ == "__main__": # testy
+    from card import Card
     def print_end(ranking):
         print(ranking)
 
@@ -177,7 +171,7 @@ if __name__ == "__main__":
     # WAŻNE - założyłam, że to gra zadba o to, żeby dostarczyć odpowiednią informację o kolorze jesli jest RAINBOW,
     # w tym kiedy jest ^ lub ^^ (bo jesli jest więcej niż 1 na starcie to można wybrać, na którego działa
 
-    board = Board(5)  # przecinek w princie wstawia dodatkową spację
+    board = Board(5)
     board.move_turtle("YELLOW", 2)
     board.move_turtle("PURPLE", 3)
     board.move_turtle("GREEN", 2)

@@ -3,71 +3,59 @@ from player import Player
 from deck import Deck
 from card import Card
 from board import Board
-# from player import Player
-# from deck import Deck
-# from card import Card
-# from board import Board
-# from turtle import Turtle
 
-class Game:
-    def __init__(self, ip_players, fields): # gra dostaje liste adresow ip graczy
+class Game: # klasa gra - koordynuje przebieg gry: kolejność graczy, ich tury, zachowanie się planszy
+    def __init__(self, ip_players, fields): # gra dostaje listę adresow ip graczy i liczbę pol które sa na planszy (w sumie ze startem i metą)
         self.players = {}
         self.whos_turn = []
-        self.deck = Deck()
-        self.board = Board(fields)
+        self.deck = Deck() # tworzę stos kart do dobierania
+        self.board = Board(fields) # tworzę planszę
         self.licznik = 0
         self.is_finished = False
-        # turtles = [Turtle("RED"),Turtle("GREEN"),Turtle("BLUE"),Turtle("PURPLE"),Turtle("YELLOW")]
-        # shuffle(turtles)
-        # tworze graczy przypisuje im losowe zolwie i ich adresy ip
-        for i in range(len(ip_players)):
+        for i in range(len(ip_players)): # tworzę graczy
             player = Player(ip_players[i])
             self.players[ip_players[i]] = player
             self.whos_turn.append(player)
-            # turtles.pop(0)
-        # gracze dostaja po 5 kart na poczatku
-        for i in range(5):
+        for i in range(5): # gracze dostają po 5 kart na początku
             for p in self.players:
                 self.players[p].add_card(self.deck.take_card())
 
-    def get_ip_of_next(self):
-        return self.whos_turn[self.licznik].get_ip()
-    def turn(self, player, card, color=None):
-        self.board.accept_card(card, color) # karta rusza zlowiem
-        player.remove_card(card) # zabieramy ta karte z reki
-        self.deck.throw_card(card) # wrzucamy na stos kart odrzuconych
-        player.add_card(self.deck.take_card()) # dobiera nowa karte
+    def get_ip_of_next(self): # zwraca ip gracza który następny będzie wykonywał ruch
+        return self.whos_turn[self.licznik].ip
 
-    def card_on_desk(self, ip_player, card, color=None):
-        who = self.whos_turn[self.licznik].get_ip()
-        # print("player {} who should {}".format(ip_player, who))
-        if ip_player == who: # jesli wlasciwy gracz zagral to przeprowadzamy ruch i odp stan gry
-            # print("corect player {} play card {}".format(ip_player,card))
-            self.turn(self.players[ip_player], card, color) # przy wywolaniu metody tez jest self
+    def turn(self, player, card, color=None): # przebieg tury gracza
+        self.board.accept_card(card, color) # karta rusza żółwiem
+        player.remove_card(card) # zabieramy tą karte z reki gracza
+        self.deck.throw_card(card) # wrzucamy ją na stos kart odrzuconych
+        player.add_card(self.deck.take_card()) # gracz dobiera nową kartę
+
+    def card_on_desk(self, ip_player, card, color=None): # zagranie karty przez gracza
+        who = self.whos_turn[self.licznik].ip
+        if ip_player == who: # jesli właściwy gracz zagrał to przeprowadzamy ruch i zwracamy stan gry
+            self.turn(self.players[ip_player], card, color)
             self.licznik += 1
-            # print("licznik {}".format(self.licznik))
             if len(self.whos_turn) == self.licznik:
                 self.licznik = 0
             return self.get_state()
-        else: # odpowiedz pusta oznacza ze ten gracz nie mial zagrac karty (None)
+        else: # gdy zagrał gracz który nie ma teraz ruchu nic się nie dzieje
             return None
 
-    def get_state(self):
-        players_state = {} # []
+    def get_state(self): # stan gry - zwraca aktualny stan planszy i lista stanow kart graczy, a gdy koniec gry zwraca ranking
+        players_state = {}
         for key in self.players:
-            players_state[key] = self.players[key].get_state() # lista stanow kart graczy
+            players_state[key] = self.players[key].get_state()
         state = {
             "board": self.board.get_state(),
             "players": players_state
         }
         self.is_finished = self.board.is_finished
         if self.is_finished:
-            return self.board.ranking # na koniec gry wyswietl ranking ktory jest w board'zie
+            return self.board.ranking
         return state
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # testy
     import random
     for j in range(5):
         koniec = True
@@ -93,9 +81,3 @@ if __name__ == "__main__":
                 break
         print("gra skonczyla sie po {} krokach".format(i))
         print("czy gra sie skonczyla? ", koniec)
-
-
-
-# przeprowadzic rozgrywki kartami poprzez wykonanie tylko card_on_desk
-
-# co jak na koniec jest kilka zlowi na starcie? jak powinny byc pokazane w rankingu?
