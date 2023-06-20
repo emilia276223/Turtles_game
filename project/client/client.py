@@ -28,25 +28,25 @@ class Client:
 		if self.textUI.state == "error":
 			return "error"
 
-		state = self.conn.get_state()
-		print(state)
+		game_state = self.conn.get_state()
+		# print(state)
 		if self.state == "game":
-			if state["turn"] == self.conn.ip:
-				card = self.gui.go(state)
+			if game_state["turn"] == self.conn.ip:
+				card = self.gui.go(game_state)
 				game_state = self.conn.card_on_table(card)
 			else:
-				self.gui.show(state)
-				game_state = state
-				time.sleep(0.3)
-			if game_state["g_status"] == "finished":
-				self.gui.go(game_state)
-				self.state = "finished"
-				self.ranking = game_state["ranking"]
-				self.users_info = game_state["users_info"]
-				print("Game finished")
-				print("Ranking: ", g1.ranking)
-				print("Users info: ", g1.users_info)
-				self.gui.end()
+				self.gui.show(game_state)
+				time.sleep(0.7) # how frequently is refreshed, can be changed by more frequency results in more visible
+
+		if game_state["g_status"] == "finished":
+			self.gui.go(game_state)
+			self.state = "finished"
+			self.ranking = game_state["ranking"]
+			self.users_info = game_state["users_info"]
+			print("Game finished")
+			print("Ranking: ", g1.ranking)
+			print("Users info: ", g1.users_info)
+			self.gui.end()
 
 		# else:
 		# 	self.gui.end()

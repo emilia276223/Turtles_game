@@ -64,7 +64,7 @@ class GUI:
 	def show(self, game_state):
 		state = game_state["game_state"]
 		self.draw_board.draw(state["board"])
-		self.screen.blit(self.not_your_turn_image, (0,0))
+		self.screen.blit(self.not_your_turn_image, (0, 0))
 		pygame.display.update()
 
 	def go(self, game_state):
@@ -179,8 +179,8 @@ class DrawBoard:
 		self.screen.blit(self.myturtle, (0, 0))
 		# print(state)
 		for j in range(len(state["0"])):
-			self.draw_turtle.draw(state["0"][j],
-								  (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
 		for i in range(1, len(state)):
 			for j in range(len(state[str(i)])):
 				self.draw_turtle.draw(state[str(i)][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
