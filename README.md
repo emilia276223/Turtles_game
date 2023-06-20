@@ -20,4 +20,4 @@ Należy uruchomić plik client (z katalogu client). Następnie należy podać IP
 
 ## Ustawienia ilości graczy
 
-Gra jest automatycznie ustawiona na grę dla 2 graczy. Żeby to zmienić należy zmienić wartość liczby graczy w pliku z serwerem (na samej górze pliku). Gra może być dla 1 - 5 graczy (dla większej ilości nie starczyłoby żółwi)
+Gra jest automatycznie ustawiona na grę dla 2 graczy. Żeby to zmienić należy zmienić wartość liczby graczy w pliku z serwerem (na samej górze pliku app.py). Gra może być dla 1 - 5 graczy (dla większej ilości nie starczyłoby żółwi)
