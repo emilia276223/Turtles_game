@@ -28,7 +28,7 @@ class Client:
 		if self.textUI.state == "error":
 			return "error"
 
-		state = self.conn.get_state()  # jeszcze nie wiadomo czy dziala
+		state = self.conn.get_state()
 		print(state)
 		if self.state == "game":
 			if state["turn"] == self.conn.ip:
@@ -45,6 +45,15 @@ class Client:
 					self.gui.end()
 			else:
 				self.gui.draw(state)
+				if state["g_status"] == "finished":
+					self.gui.go(state)
+					self.state = "finished"
+					self.ranking = state["ranking"]
+					self.users_info = state["users_info"]
+					print("Game finished")
+					print("Ranking: ", g1.ranking)
+					print("Users info: ", g1.users_info)
+					self.gui.end()
 
 		# else:
 		# 	self.gui.end()

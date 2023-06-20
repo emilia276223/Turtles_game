@@ -64,13 +64,8 @@ class GUI:
 		state = game_state["game_state"]
 		# drawing board
 		self.draw_board.draw(state["board"])
-
-		# drawing all cards
-		i = 0
-		for card in state["players"][self.player_key]:
-			self.draw_card.draw(card, i)
-			i += 1
-
+		# drawing that is not their turn
+		# TO DO
 		pygame.display.update()
 
 	def go(self, game_state):
@@ -81,6 +76,13 @@ class GUI:
 		if game_state["g_status"] == "game":
 			self.draw(game_state)
 			state = game_state["game_state"]
+
+			# drawing all cards
+			i = 0
+			for card in state["players"][self.player_key]:
+				self.draw_card.draw(card, i)
+				i += 1
+
 			# state = game_state["game_state"]
 			# # self.draw_board.draw(state["board"])
 			# i = 0
