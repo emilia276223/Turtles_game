@@ -64,7 +64,7 @@ class GUI:
 	def show(self, game_state):
 		state = game_state["game_state"]
 		self.draw_board.draw(state["board"])
-		self.screen.blit(self.not_your_turn_image)
+		self.screen.blit(self.not_your_turn_image, (0,0))
 		pygame.display.update()
 
 	def go(self, game_state):
