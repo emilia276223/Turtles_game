@@ -82,7 +82,7 @@ class GUI:
 			for card in state["players"][self.player_key]:
 				self.draw_card.draw(card, i)
 				i += 1
-
+			pygame.display.update()
 			# state = game_state["game_state"]
 			# # self.draw_board.draw(state["board"])
 			# i = 0
