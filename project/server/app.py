@@ -137,7 +137,7 @@ def card_on_board():  # CZY TO JEST DOBRZE???
 	return server.get_state()
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # testy
 	user = UserInfo("Adam")
 	print(user)
 	user.turtle = "PINK"
@@ -165,8 +165,4 @@ if __name__ == "__main__":
 		card3["choice"] = "GREEN"
 	s.card_table(card3, "1")
 	print(s.get_state())
-# s.card_table(card1, "1")
-	# print(s.get_state())
-	# s.card_table(card2, "2")
-	# print(s.get_state())
 

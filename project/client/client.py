@@ -44,10 +44,10 @@ class Client:
 			self.state = "finished"
 			self.ranking = game_state["ranking"]
 			self.users_info = game_state["users_info"]
+			self.gui.end()
 			print("Game finished")
 			print("Ranking: ", g1.ranking)
 			print("Users info: ", g1.users_info)
-			self.gui.end()
 
 class TextUI:
 	def __init__(self):
