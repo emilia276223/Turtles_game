@@ -1,51 +1,52 @@
 import pygame
 import time
 
-
-class GUI:
-	def __init__(self, player_key):
+# obsługa interfejsu graficznego
+class GUI: # całość / połączenie interfejsu graficznego
+	def __init__(self, player_key): # ustawienie parametrów, załadowanie potrzebnych plików
+		# ustawienie odpowiednich wartości
 		self.player_key = player_key # ip gracza
 		self.state = "not started"
 		self.last_state = False
+
+		# utworzenie okna, ale jeszcze nie uruchomienie
 		self.SIZE = self.WIDTH, self.HEIGHT = (1500, 900)
 		self.screen = pygame.display.set_mode(self.SIZE)
 		pygame.display.set_caption("Turtles Game" + self.player_key)
-		self.draw_board = DrawBoard(self.screen)  # to jeszcze zobaczymy czy potrzebne, mozliwe ze nie
-		self.draw_card = DrawCard(self.screen)
+
+		# klasy rysujące poszczególne części
+		self.draw_board = DrawBoard(self.screen) # rysowanie planszy, w tym ustawienia żółwi
+		self.draw_card = DrawCard(self.screen) # rysowanie konkretnej karty
+
+		# obrazki potrzebne czasem (m. in. dopytanie o kolor karty)
 		self.choose_image = pygame.image.load("choosing.png")
 		self.choose_image_background = pygame.image.load("Choose_background.png")
 		self.not_your_turn_image = pygame.image.load("not_your_turn.png")
 
 
-	def start(self, turtle):
-		# wyswietlenie zolwia danego gracza na duzym ekranie
+	def start(self, turtle): # uruchomienie okna oraz dodanie informacji o żółwiu przydzielonym graczowi
 		self.my_turtle = turtle
 		self.draw_board.start(turtle)
 		pygame.init()
 
-	def end(self):
-		# sprawdzenie czy gracz wygral czy nie
+	def end(self): # zamknięcie okna i wyłączenie gry
 		pygame.quit()
 		exit()
 		pass
 
-	def ask_if_needed(self, color, val):
-		# print("color = ", color, ", val =", val)
+	def ask_if_needed(self, color, val): # dopytanie o to, jakim żółwiem należy poruszyć, jeśli karta pozwala na wybór
 		if color == "RAINBOW":
-			# print("kolor sie zgadza")
 			if (val != "^" and val != "^^"):
-				# print("movement sie zgadza")
-				# trzeba doprecyzowac, jakim zolwiem sie porusza
+				# odpowiednia grafika
 				self.screen.blit(self.choose_image_background, (0, 0))
 				self.screen.blit(self.choose_image, (0, 0))
 				pygame.display.update()
-				# x = 0
-				while True:  # not clicked
+				while True:  # dopóki nie zostanie wybrane
 					events = pygame.event.get()
 					for e in events:
-						if e.type == pygame.QUIT:
+						if e.type == pygame.QUIT: # umożliwia zakończenie gry w dowolnym momencie (krzyżyk w prawym górnym rogu)
 							self.end()
-						if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
+						if e.type == pygame.MOUSEBUTTONUP:  # zczytanie wybranego koloru żółwia
 							position = pygame.mouse.get_pos()
 							x, y = position
 							if 360 < y < 505:
@@ -61,43 +62,44 @@ class GUI:
 									return "PURPLE"
 		return None
 
-	def show(self, game_state):
+	def show(self, game_state): # aktualizacja planszy, bez możliwości wykonania ruchu
 		state = game_state["game_state"]
 		self.draw_board.draw(state["board"])
 		self.screen.blit(self.not_your_turn_image, (0, 0))
 		pygame.display.update()
 
-	def go(self, game_state):
+	def go(self, game_state): # aktualizacja planszy + wykonanie ruchu
 
-		# if during a game
+		# jeśli jest w trakcie gry
 		if game_state["g_status"] == "game":
 			state = game_state["game_state"]
 
-			# drawing board
+			# narysowanie planszy
 			self.draw_board.draw(state["board"])
 
-			# drawing all cards
+			# wyświetlenie kart gracza
 			i = 0
 			for card in state["players"][self.player_key]:
 				self.draw_card.draw(card, i)
 				i += 1
 			pygame.display.update()
 
-			# choosing card to play
-			while True:  # not clicked
+			# wybranie karty do zagrania
+			while True:
 				events = pygame.event.get()
 				for e in events:
-					# makes closing the window during game possible
+					# umożliwienie zakończenia gry
 					if e.type == pygame.QUIT:
 						self.end()
 
-					# cheching if click was on card
+					# sprawdzenie czy została wybrana karta
 					if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
 						position = pygame.mouse.get_pos()
 						chosen = self.draw_card.chosen_card(position)
 
-						# if there was a card chosen then returning it (with additional information if needed)
-						if chosen:  # jesli zostala wybrana karta
+						# jeśli została wybrania karta to dopytanie się o dodatkowe informacje, jeśli są potrzebne
+						# i zwrócenie całości
+						if chosen:
 							card = state["players"][self.player_key][chosen - 1]
 							return {
 								"color": card["color"],
@@ -105,16 +107,16 @@ class GUI:
 								"choice": self.ask_if_needed(card["color"], card["val"])
 							}
 
-		# if game already ended and we want to show results
+		# jeśli gra została już zakończona i chcemy pokazać wyniki
 		elif game_state["g_status"] == "finished":
 			ranking = game_state["ranking"]
 
-			# if the player won
+			# jeśli gracz wygrał
 			if ranking[0] == self.my_turtle:
 				self.screen.blit(pygame.image.load("wygrana.png"), (0, 0))
 				pygame.display.update()
 
-			# if the player lost then we show wich turtle won
+			# jeśli gracz przegrał pokazujemy, który żółw wygrał
 			else:
 				self.screen.blit(pygame.image.load("przegrana.png"), (0, 0))
 				pygame.display.update()
@@ -130,28 +132,28 @@ class GUI:
 					self.screen.blit(pygame.image.load("cpurple.png"), (655, 510))
 				pygame.display.update()
 
-			# we wait for a player to click so that we make sure they see result of the game
-			while True:  # not clicked
+			# czekamy na gracza, żeby kliknął, żeby miał czas zobaczyć wyniki
+			while True:
 				events = pygame.event.get()
 				for e in events:
 					if e.type == pygame.QUIT:
 						self.end()
-					if e.type == pygame.MOUSEBUTTONUP:  # jesli klikniecie
+					if e.type == pygame.MOUSEBUTTONUP:
 						self.end()
 						return None
 
-		# if there was something wrong we return error
+		# jeśli coś zadziałało źle zwracamy error
 		else:
 			self.state = "error"
 
 
-class DrawBoard:
+class DrawBoard: # wyświetlenie planszy wraz z żółwiami na niej
 	def __init__(self, screen):
 		self.screen = screen
 		self.draw_turtle = DrawTurtle(screen)
 		self.board = pygame.image.load("board.png")
-		self.fields = {  # places in witch turtles on the board will be places thepending on field they are in
-			0: [380, 1400],  # start
+		self.fields = {  # umiejscowienie pól na obrazku
+			0: [380, 1400], # pole startowe
 			1: [102, 1216],
 			2: [268, 1160],
 			3: [390, 1035],
@@ -171,44 +173,45 @@ class DrawBoard:
 			"PURPLE": pygame.image.load("mypurpleturtle.png")
 		}
 
-	def start(self, turtle):
+	def start(self, turtle): # ustawienie żółwia gracza
 		self.myturtle = self.myturtles[turtle]
 
-	def draw(self, state):
+	def draw(self, state):  # wyświetlenie tła i żółwi w odpowiednich miejscach
 		self.screen.blit(self.board, (0, 0))
 		self.screen.blit(self.myturtle, (0, 0))
 		# print(state)
-		for j in range(len(state["0"])):
-			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
-			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))  # wyswietlane obok siebie
+		for j in range(len(state["0"])): # na polu startowym żółwie są obok siebie
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))
+			self.draw_turtle.draw(state["0"][j], (self.fields[0][1], self.fields[0][0] - j * 70))
+
+		# a na pozostałych polach są jedne na drugich
 		for i in range(1, len(state)):
 			for j in range(len(state[str(i)])):
-				self.draw_turtle.draw(state[str(i)][j], (self.fields[i][1], self.fields[i][0] - j * 15))  # jedne na drugich
+				self.draw_turtle.draw(state[str(i)][j], (self.fields[i][1], self.fields[i][0] - j * 15))
 
 
-class DrawTurtle:
+class DrawTurtle: # wyświetlenie żółwia
 	def __init__(self, screen):
 		self.images = {
 			"YELLOW": pygame.image.load("yellow.png"),
 			"RED": pygame.image.load("red.png"),
-			# to sie zmieni jak mi zacznie dzialac program do rysowania bo na razie odmawia wspolpracy z internetem
 			"BLUE": pygame.image.load("blue.png"),
 			"GREEN": pygame.image.load("green.png"),
 			"PURPLE": pygame.image.load("purple.png")
 		}
 		self.screen = screen
 
-	def draw(self, turtle, place):
-		# print("wyswietlam", turtle)
+	def draw(self, turtle, place): # wyświetlenie żółwia w odpowiednim kolorze w danym miejscu
 		self.screen.blit(self.images[turtle], place)
 		pygame.display.update()
-	# time.sleep(0.1)
 
 
-class DrawCard:
+class DrawCard: # wyświetlanie karty
 
 	def __init__(self, screen):
 		self.screen = screen
+
+		# potrzebne grafiki, z których (odpowiednio wybranych) składa się każda karta
 		self.background = pygame.image.load("card_background.png")
 		self.colors = {
 			"RAINBOW": pygame.image.load("crainbow.png"),  # jak wyzej, obrazki potem zmienimy
@@ -236,13 +239,13 @@ class DrawCard:
 			4: (1135, 550)
 		}
 
-	def draw(self, card, field):
+	def draw(self, card, field): # "złożenie" i wyświetlenie karty w miejscu odpowiadającym danemu polu
 		place = self.places[field]
 		self.screen.blit(self.background, place)
 		self.screen.blit(self.colors[card["color"]], place)
 		self.screen.blit(self.movement[card["val"]], place)
 
-	def chosen_card(self, place):
+	def chosen_card(self, place): # sprawdzenie, czy i która karta została kliknięta
 		x, y = place
 		if y > 850:
 			return False
