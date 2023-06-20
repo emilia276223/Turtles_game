@@ -34,26 +34,19 @@ class Client:
 			if state["turn"] == self.conn.ip:
 				card = self.gui.go(state)
 				game_state = self.conn.card_on_table(card)
-				if game_state["g_status"] == "finished":
-					self.gui.go(game_state)
-					self.state = "finished"
-					self.ranking = game_state["ranking"]
-					self.users_info = game_state["users_info"]
-					print("Game finished")
-					print("Ranking: ", g1.ranking)
-					print("Users info: ", g1.users_info)
-					self.gui.end()
 			else:
 				self.gui.draw(state)
-				if state["g_status"] == "finished":
-					self.gui.go(state)
-					self.state = "finished"
-					self.ranking = state["ranking"]
-					self.users_info = state["users_info"]
-					print("Game finished")
-					print("Ranking: ", g1.ranking)
-					print("Users info: ", g1.users_info)
-					self.gui.end()
+				game_state = state
+				time.sleep(0.3)
+			if game_state["g_status"] == "finished":
+				self.gui.go(game_state)
+				self.state = "finished"
+				self.ranking = game_state["ranking"]
+				self.users_info = game_state["users_info"]
+				print("Game finished")
+				print("Ranking: ", g1.ranking)
+				print("Users info: ", g1.users_info)
+				self.gui.end()
 
 		# else:
 		# 	self.gui.end()
@@ -68,7 +61,7 @@ class TextUI:
 		nick = input()
 		return (nick, url)
 
-	def go_on(self, state):
+	def go_on(self, state): # dopóki gra się nie rozpoczęła wypisuje informacje o czekaniu na graczy
 		# jeszcze raczej nie dziala ale juz cos robi
 		if state["g_status"] == "game":
 			self.state = "game started"
@@ -82,7 +75,8 @@ class TextUI:
 			print("There is a problem: game already ended")
 
 if __name__ == "__main__":
-	g1 = Client()
+	# uruchomienie gry
+	g1 = Client() # stworzenie klienta (gracza)
 	while not g1.state == "finished":
-		g1.play()
+		g1.play() # odswieżenie gry
 
